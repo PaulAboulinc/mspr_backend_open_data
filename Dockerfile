@@ -1,3 +1,5 @@
-FROM maven:3-alpine
-RUN addgroup -S spring && adduser -S spring -G spring
-USER spring:spring
+FROM openjdk:8-jdk-alpine
+EXPOSE 8080
+ARG JAR_FILE=target/recipe-BACKEND.jar
+ADD ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
