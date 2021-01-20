@@ -4,13 +4,14 @@ pipeline {
 //     }
     agent any
     stages {
-//         stage('Install Maven') {
-//             steps {
-//                 sh 'export MAVEN_HOME=/opt/maven'
-//                 sh 'export PATH=$PATH:$MAVEN_HOME/bin'
-//                 sh 'mvn --version'
-//             }
-//         }
+        stage('Install Maven') {
+            steps {
+                sh 'export MAVEN_HOME=/opt/maven'
+                sh 'export PATH=$PATH:$MAVEN_HOME/bin'
+                sh 'mvn --version'
+                sh 'mvn clean package'
+            }
+        }
         stage('Test') {
             steps {
                 sh 'echo "mvn test"'
