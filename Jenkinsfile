@@ -3,10 +3,6 @@ pipeline {
 //         dockerfile true
 //     }
     agent any
-    tools {
-        maven 'Maven 3.6.0'
-        jdk 'jdk8'
-    }
     stages {
         stage('Install Maven') {
             steps {
