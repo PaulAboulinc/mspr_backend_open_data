@@ -1,13 +1,7 @@
-#RUN mvn clean package -DskipTests
-FROM maven:3-alpine
-RUN addgroup -S spring && adduser -S spring -G spring
-USER spring:spring
+FROM maven:3.6.0-jdk-8-slim
+COPY src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean package -DskipTests
+
 EXPOSE 8080
-ADD . /opt/app
-WORKDIR /opt/app
-RUN ls
-RUN mvn clean package -DskipTests
-#RUN mvn -f /home/app/pom.xml clean package -DskipTests
-ARG JAR_FILE=target/recipe-BACKEND.jar
-ADD ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-jar","/home/app/target/recipe-BACKEND.jar"]
