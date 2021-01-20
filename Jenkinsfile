@@ -8,6 +8,13 @@ pipeline {
         jdk 'jdk8'
     }
     stages {
+        stage('Install Maven') {
+            steps {
+                sh 'export MAVEN_HOME=/opt/maven'
+                sh 'export PATH=$PATH:$MAVEN_HOME/bin'
+                sh 'mvn --version'
+            }
+        }
         stage('Test') {
             steps {
                 sh 'echo "mvn test"'
