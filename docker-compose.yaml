@@ -4,7 +4,7 @@ services:
   app:
     build:
       context: .
-    container_name: app
+    container_name: recipe_back_mspr
     depends_on:
       - dbpostgres
     environment:

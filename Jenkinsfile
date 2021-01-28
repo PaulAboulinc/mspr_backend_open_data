@@ -1,13 +1,16 @@
 def hasFailed = false;
 
 pipeline {
-    agent {
-        dockerfile true
-    }
+    agent any
     stages {
+        stage('Init docker') {
+            steps {
+                sh 'docker-compose up --build'
+            }
+        }
         stage('Test') {
             steps {
-                sh 'echo "mvn test"'
+                withDockerContainer("recipe_back_mspr") { sh 'echo "mvn test"'}
             }
             post {
                 failure {
@@ -18,7 +21,7 @@ pipeline {
         stage('Build') {
             when { expression { hasFailed == false }}
             steps {
-                sh 'echo "mvn -B -DskipTests package"'
+                withDockerContainer("recipe_back_mspr") { sh 'echo "mvn -B -DskipTests package"'}
             }
             post {
                 failure {
@@ -29,7 +32,7 @@ pipeline {
         stage('SonarQube') {
             when { expression { hasFailed == false }}
             steps {
-                sh 'echo "mvn sonar:sonar"'
+                withDockerContainer("recipe_back_mspr") { sh 'echo "mvn sonar:sonar"'}
             }
         }
     }
