@@ -10,7 +10,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                withDockerContainer("recipeback_app") { sh 'mvn test'}
+                withDockerContainer("recipeback_app") { sh 'mvn -B test'}
             }
             post {
                 failure {
@@ -32,7 +32,7 @@ pipeline {
         stage('SonarQube') {
             when { expression { hasFailed == false }}
             steps {
-                withDockerContainer("recipeback_app") { sh 'mvn sonar:sonar'}
+                withDockerContainer("recipeback_app") { sh 'mvn -B sonar:sonar'}
             }
         }
     }
