@@ -5,12 +5,12 @@ pipeline {
     stages {
         stage('Init docker') {
             steps {
-                sh 'docker-compose up -d'
+                sh 'docker-compose --build up -d'
             }
         }
         stage('Test') {
             steps {
-                withDockerContainer("recipeback2_app") { sh 'echo "mvn test"'}
+                withDockerContainer("recipeback_app") { sh 'echo "mvn test"'}
             }
             post {
                 failure {
@@ -21,7 +21,7 @@ pipeline {
         stage('Build') {
             when { expression { hasFailed == false }}
             steps {
-                withDockerContainer("recipeback2_app") { sh 'echo "mvn -B -DskipTests package"'}
+                withDockerContainer("recipeback_app") { sh 'echo "mvn -B -DskipTests package"'}
             }
             post {
                 failure {
@@ -32,7 +32,7 @@ pipeline {
         stage('SonarQube') {
             when { expression { hasFailed == false }}
             steps {
-                withDockerContainer("recipeback2_app") { sh 'echo "mvn sonar:sonar"'}
+                withDockerContainer("recipeback_app") { sh 'echo "mvn sonar:sonar"'}
             }
         }
     }
