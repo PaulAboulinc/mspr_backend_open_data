@@ -21,7 +21,7 @@ pipeline {
         stage('Build') {
             when { expression { hasFailed == false }}
             steps {
-                withDockerContainer("recipe_back_mspr") { sh 'echo "mvn -B -DskipTests package"'}
+                withDockerContainer("recipeback2_app") { sh 'echo "mvn -B -DskipTests package"'}
             }
             post {
                 failure {
@@ -32,7 +32,7 @@ pipeline {
         stage('SonarQube') {
             when { expression { hasFailed == false }}
             steps {
-                withDockerContainer("recipe_back_mspr") { sh 'echo "mvn sonar:sonar"'}
+                withDockerContainer("recipeback2_app") { sh 'echo "mvn sonar:sonar"'}
             }
         }
     }
