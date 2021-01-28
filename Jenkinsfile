@@ -5,12 +5,12 @@ pipeline {
     stages {
         stage('Init docker') {
             steps {
-                sh 'docker-compose up --build -d'
+                sh 'docker-compose up -d'
             }
         }
         stage('Test') {
             steps {
-                withDockerContainer("recipe_back_mspr") { sh 'echo "mvn test"'}
+                withDockerContainer("recipeback2_app") { sh 'echo "mvn test"'}
             }
             post {
                 failure {
