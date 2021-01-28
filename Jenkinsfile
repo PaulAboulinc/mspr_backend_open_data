@@ -1,3 +1,5 @@
+def hasFailed = false;
+
 pipeline {
     agent {
         dockerfile true
@@ -7,15 +9,27 @@ pipeline {
             steps {
                 sh 'echo "mvn test"'
             }
-        }
-        stage('Build') {
-            steps {
-                sh 'mvn -B -DskipTests clean package'
+            post {
+                failure {
+                    script { hasFailed = true }
+                }
             }
         }
-        stage('Code Quality') {
+        stage('Build') {
+            when { expression { hasFailed == false }}
             steps {
-                sh 'mvn sonar:sonar -Dsonar.projectKey=com.pafpsdnc:recipe -Dsonar.host.url=http://thedawndev.fr:9001 -Dsonar.login=b138897801d4014f1a4c1487ead8491e177fcdb3'
+                sh 'mvn -B -DskipTests package'
+            }
+            post {
+                failure {
+                    script { hasFailed = true }
+                }
+            }
+        }
+        stage('SonarQube') {
+            when { expression { hasFailed == false }}
+            steps {
+                sh 'mvn sonar:sonar'
             }
         }
     }

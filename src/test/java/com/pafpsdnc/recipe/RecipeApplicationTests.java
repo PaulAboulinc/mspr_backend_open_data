@@ -1,6 +1,6 @@
 package com.pafpsdnc.recipe;
 
-import com.pafpsdnc.recipe.Controller.HellowController;
+import com.pafpsdnc.recipe.Controller.RecipeController;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @SpringBootTest
 class RecipeApplicationTests {
 	@Autowired
-	private HellowController controller;
+	private RecipeController controller;
 
 	@Test
 	void contextLoads() {

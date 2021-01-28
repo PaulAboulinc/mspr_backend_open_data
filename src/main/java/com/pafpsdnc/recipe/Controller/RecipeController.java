@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
-public class HellowController {
+public class RecipeController {
     @Autowired
     private RecipeRepository recipeRepository;
 
