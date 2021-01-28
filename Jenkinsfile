@@ -18,7 +18,7 @@ pipeline {
         stage('Build') {
             when { expression { hasFailed == false }}
             steps {
-                sh 'mvn -B -DskipTests package'
+                sh 'echo "mvn -B -DskipTests package"'
             }
             post {
                 failure {
@@ -29,7 +29,7 @@ pipeline {
         stage('SonarQube') {
             when { expression { hasFailed == false }}
             steps {
-                sh 'mvn sonar:sonar'
+                sh 'echo "mvn sonar:sonar"'
             }
         }
     }
