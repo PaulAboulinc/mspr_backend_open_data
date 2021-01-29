@@ -1,44 +1,26 @@
 def deploy = true;
 
 pipeline {
-    agent {
-        dockerfile true
-    }
+    agent any
     stages {
+        stage('Build docker') {
+            steps {
+                sh 'docker-compose up --build -d'
+            }
+        }
         stage('Test') {
             steps {
-                sh 'mvn -B test'
-            }
-            post {
-                failure {
-                    script { deploy = false }
-                }
+                sh 'docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml test'
             }
         }
         stage('Build') {
             steps {
-                sh 'mvn -B -DskipTests package'
-            }
-            post {
-                failure {
-                    script { deploy = false }
-                }
+                sh 'docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml -DskipTests package'
             }
         }
         stage('SonarQube') {
             steps {
-                sh 'mvn -B sonar:sonar'
-            }
-            post {
-                failure {
-                    script { deploy = false }
-                }
-            }
-        }
-        stage('Deploy') {
-            when { expression { deploy == true }}
-            steps {
-                sh 'docker-compose up --build -d'
+                sh 'docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml sonar:sonar'
             }
         }
     }
@@ -48,6 +30,7 @@ pipeline {
                      subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
                      attachLog: true,
                      body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
+            sh 'docker-compose down'
         }
     }
 }
