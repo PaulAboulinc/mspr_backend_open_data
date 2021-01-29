@@ -1,6 +1,6 @@
 package com.pafpsdnc.recipe;
 
-import com.pafpsdnc.recipe.Controller.RecipeController;
+import com.pafpsdnc.recipe.controller.RecipeController;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
