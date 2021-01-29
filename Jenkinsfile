@@ -1,5 +1,3 @@
-def deploy = true;
-
 pipeline {
     agent any
     stages {
