@@ -10,7 +10,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml test'
+                withDockerContainer("recipeback_app") { sh 'mvn -B test'}
             }
             post {
                 failure {
@@ -21,7 +21,7 @@ pipeline {
         stage('Build') {
             when { expression { hasFailed == false }}
             steps {
-                sh 'docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml -DskipTests package'
+                withDockerContainer("recipeback_app") { sh 'mvn -B -DskipTests package'}
             }
             post {
                 failure {
@@ -32,7 +32,7 @@ pipeline {
         stage('SonarQube') {
             when { expression { hasFailed == false }}
             steps {
-                sh 'docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml sonar:sonar'
+                withDockerContainer("recipeback_app") { sh 'mvn -B sonar:sonar'}
             }
         }
     }
