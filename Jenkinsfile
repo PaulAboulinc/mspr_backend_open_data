@@ -1,38 +1,44 @@
-def hasFailed = false;
+def deploy = true;
 
 pipeline {
-    agent any
+    agent {
+        dockerfile true
+    }
     stages {
-        stage('Init docker') {
-            steps {
-                sh 'docker-compose up --build -d'
-            }
-        }
         stage('Test') {
             steps {
-                withDockerContainer("recipeback_app") { sh 'mvn -B test'}
+                sh 'mvn -B test'
             }
             post {
                 failure {
-                    script { hasFailed = true }
+                    script { deploy = false }
                 }
             }
         }
         stage('Build') {
-            when { expression { hasFailed == false }}
             steps {
-                withDockerContainer("recipeback_app") { sh 'mvn -B -DskipTests package'}
+                sh 'mvn -B -DskipTests package'
             }
             post {
                 failure {
-                    script { hasFailed = true }
+                    script { deploy = false }
                 }
             }
         }
         stage('SonarQube') {
-            when { expression { hasFailed == false }}
             steps {
-                withDockerContainer("recipeback_app") { sh 'mvn -B sonar:sonar'}
+                sh 'mvn -B sonar:sonar'
+            }
+            post {
+                failure {
+                    script { deploy = false }
+                }
+            }
+        }
+        stage('Deploy') {
+            when { expression { deploy == true }}
+            steps {
+                sh 'docker-compose up --build -d'
             }
         }
     }
