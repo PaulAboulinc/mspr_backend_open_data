@@ -2,11 +2,14 @@ version: '2'
 
 services:
   app:
-    build:
-      context: .
+    build: .
     container_name: recipe_back_mspr
     depends_on:
       - dbpostgres
+    links:
+      - dbpostgres
+    volumes:
+      -  ./:/home/app/
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres:5432/cooking
       - SPRING_DATASOURCE_USERNAME=cooking
@@ -21,7 +24,6 @@ services:
     volumes:
       - postgres:/var/lib/postgresql
       - postgres_data:/var/lib/postgresql/data
-
     environment:
       POSTGRES_DB: cooking
       POSTGRES_USER: cooking
@@ -32,3 +34,4 @@ services:
 volumes:
   postgres_data:
   postgres:
+  app_data:
