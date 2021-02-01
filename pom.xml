@@ -19,8 +19,8 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<sonar.projectKey>com.pafpsdnc:recipe</sonar.projectKey>
-		<sonar.host.url>http://thedawndev.fr:9001/</sonar.host.url>
-		<sonar.login>b138897801d4014f1a4c1487ead8491e177fcdb3</sonar.login>
+		<sonar.host.url>http://91.173.112.58:50002/</sonar.host.url>
+		<sonar.login>93ca2fee89c5c4dad7571ebea2e9c842a3355283</sonar.login>
 		<sonar.junit.reportPaths>target/surefire-reports/</sonar.junit.reportPaths>
 
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
