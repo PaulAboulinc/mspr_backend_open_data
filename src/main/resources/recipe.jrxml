@@ -1,13 +1,7 @@
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
-   http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
-              name="report" pageWidth="595" pageHeight="842"
-              columnWidth="555" leftMargin="20" rightMargin="20"
-              topMargin="20" bottomMargin="20">
+<jasperReport name="report" topMargin="20" bottomMargin="20">
     <parameter name="id" class="java.lang.Integer" />
     <queryString>
-        <![CDATA[SELECT * FROM RECIPE WHERE id = $P{id}]]>
+        <![CDATA[SELECT * FROM RECIPE WHERE id = $P{id} OR $P{id} IS NULL]]>
     </queryString>
     <field name="ID" class="java.lang.Integer"/>
     <field name="PORTIONS" class="java.lang.Double"/>

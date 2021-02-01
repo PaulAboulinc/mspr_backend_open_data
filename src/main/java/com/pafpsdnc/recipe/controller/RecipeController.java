@@ -37,6 +37,18 @@ public class RecipeController {
         return recipeRepository.findAll();
     }
 
+    @GetMapping("/pdf")
+    @ResponseStatus(HttpStatus.OK)
+    public void pdf(HttpServletResponse response) throws JRException, SQLException, IOException {
+        InputStream recipeStream = new ClassPathResource("recipe.jrxml").getInputStream();
+        JasperReport jasperReport = JasperCompileManager.compileReport(recipeStream);
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource.getConnection());
+        response.setContentType("application/x-download");
+        response.setHeader("Content-Disposition", "attachment; filename=\"recipe.pdf\"");
+        JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+    }
+
     @GetMapping("/pdf/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void pdf(HttpServletResponse response, @PathVariable Integer id) throws JRException, SQLException, IOException {
