@@ -3,15 +3,27 @@ package com.pafpsdnc.recipe.controller;
 import com.pafpsdnc.recipe.model.Recipe;
 import com.pafpsdnc.recipe.repository.RecipeRepository;
 import com.pafpsdnc.recipe.exception.RecipeNotFound;
+import net.sf.jasperreports.engine.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+import java.io.*;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/recipe")
 public class RecipeController {
     @Autowired
     private RecipeRepository recipeRepository;
+
+    @Autowired
+    private DataSource dataSource;
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -23,6 +35,21 @@ public class RecipeController {
     @ResponseStatus(HttpStatus.OK)
     public Iterable<Recipe> findRecipes() {
         return recipeRepository.findAll();
+    }
+
+    @GetMapping("/pdf/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void pdf(HttpServletResponse response, @PathVariable Integer id) throws JRException, SQLException, IOException {
+        InputStream recipeStream = new ClassPathResource("recipe.jrxml").getInputStream();
+        JasperReport jasperReport = JasperCompileManager.compileReport(recipeStream);
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("id", id);
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource.getConnection());
+        response.setContentType("application/x-download");
+        response.setHeader("Content-Disposition", "attachment; filename=\"recipe.pdf\"");
+        JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
     }
 
     @PostMapping("/")
