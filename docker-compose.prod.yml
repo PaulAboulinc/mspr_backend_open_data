@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   app:
@@ -10,13 +10,18 @@ services:
       - dbpostgres
     volumes:
       -  ./:/home/app/
+    expose:
+      - 80
+    restart: always
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres:5432/cooking
       - SPRING_DATASOURCE_USERNAME=cooking
       - SPRING_DATASOURCE_PASSWORD=cooking
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-    ports:
-      - 7001:8080
+      - VIRTUAL_PORT=8080
+      - VIRTUAL_HOST=api-recipe.nonstopintegration.ml
+      - LETSENCRYPT_HOST=api-recipe.nonstopintegration.ml
+      - LETSENCRYPT_EMAIL=nonstopintegration@gmail.com
 
   dbpostgres:
     image: postgres:13.1-alpine
@@ -35,3 +40,8 @@ volumes:
   postgres_data:
   postgres:
   app_data:
+
+networks:
+  default:
+    external:
+      name: webproxy
