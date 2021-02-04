@@ -83,7 +83,7 @@ http://localhost:7001/api/
 
 ## Dépendances
 
-## Test Unitaires
+## Tests Unitaires
 
 ## Lint
 
