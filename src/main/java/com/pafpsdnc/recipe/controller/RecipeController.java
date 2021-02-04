@@ -68,7 +68,7 @@ public class RecipeController {
     @ResponseStatus(HttpStatus.CREATED)
     public Recipe createRecipe() {
         Recipe recipe = new Recipe();
-        recipe.setPortions(1000);
+        recipe.setPortions(100);
         recipe.setName("name");
         recipe.setDescription("description");
 
