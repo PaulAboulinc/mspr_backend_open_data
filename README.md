@@ -66,9 +66,11 @@ http://localhost:7001/api/
 
 ## Dépendances
 
-## Conteneurisation et Virtualisation
-
 ## Test Unitaires
+
+## Lint
+
+## Outils de qualité du code
 
 ## Intégration continue
 
