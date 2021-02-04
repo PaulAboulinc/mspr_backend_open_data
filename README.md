@@ -46,10 +46,13 @@ volumes:
   postgres:
   app_data:
 ```
-
 * Pour construire le conteneur et le deployer en local
 ```bash
 docker-compose up --build -d
+```
+* L'API est disponible à l'URL suivant : 
+```html
+http://localhost:7001/api/
 ```
 
 ## Dépendances
