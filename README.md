@@ -46,6 +46,15 @@ volumes:
   postgres:
   app_data:
 ```
+> Ce fichier docker-compose permet de :
+> * Pour le service `app`
+>  * Indique que `dbpostgres` est pré-requis pour le construction du service `app`
+>  * Construire un conteneur appelé `recipe_back_msp` à partir du **Dockerfile** présent à la racine du projet
+>  * Lier au conteneur `dbpostgres`
+>  * Utiliser la racine du répertoire local comme **volumes** et le lier au source du conteneur
+>  * Renseigner les variables d'environnements dont l'application à besoin
+>  * Rediriger le port **8080** du conteneur vers le **7001** de la machine parent
+
 * Pour construire le conteneur et le deployer en local
 ```bash
 docker-compose up --build -d
