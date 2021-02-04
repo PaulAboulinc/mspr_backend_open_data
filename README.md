@@ -85,6 +85,7 @@ http://localhost:7001/api/
 * Spring Web ==> permet de build (utilise apache tomcat)
 * PostgresSQL driver ==> driver pour se connecter
 * Spring Data JPA ==> Utilise Hibernate pour gérer la persistance
+* Springdoc openapi ==> permet de gérer la doc (swagger)
 * Junit == permet de faire les test unitaires
 * jasperreports ==> Permet de générer un pdf
 * log4j2 ==> Permet de générer et formatter les logs
