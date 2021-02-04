@@ -85,8 +85,6 @@ http://localhost:7001/api/
 
 ## Tests Unitaires
 
-## Lint
-
 ## Outils de qualité du code
 
 ## Intégration continue
