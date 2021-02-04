@@ -1,12 +1,14 @@
 # MSPR - Recipe Backend
 
 ## Pré-requis
+
 * Git
 * Docker et Docker Compose
-* 
 
 ## Installation de l'environnement de développement
+
 * Pour l'environnement local, utiliser le fichier `docker-compose.yml`
+
 ```yml
 version: '3'
 
@@ -44,25 +46,40 @@ services:
 volumes:
   postgres_data:
   postgres:
-  app_data:
 ```
-> Ce fichier docker-compose permet de :
-> * Pour le service `app`
->  * Indique que `dbpostgres` est pré-requis pour le construction du service `app`
->  * Construire un conteneur appelé `recipe_back_msp` à partir du **Dockerfile** présent à la racine du projet
->  * Lier au conteneur `dbpostgres`
->  * Utiliser la racine du répertoire local comme **volumes** et le lier au source du conteneur
->  * Renseigner les variables d'environnements dont l'application à besoin
->  * Rediriger le port **8080** du conteneur vers le **7001** de la machine parent
 
-* Pour construire le conteneur et le deployer en local
+> Ce fichier **docker-compose** permet de :
+>
+> * Pour le service `backend`
+>    * Indique que `dbpostgres` est pré-requis pour le construction du service `app`
+>    * Construire un conteneur appelé `recipe_back_msp` à partir du **Dockerfile** présent à la racine du projet
+>    * Lier au conteneur `dbpostgres`
+>    * Utiliser la racine du répertoire local comme **volumes** et le lier au source du container
+>    * Renseigner les variables d'environnements dont l'application à besoin
+>    * Rediriger le port **8080** du container vers le **7001** de la machine parent
+>  * Pour le service `db`
+>     * Construire le container `dbpostgres` à partir de l'image `postgres:13.1-alpine`
+>     * Renseigner les variables d'environnements nécessaires à la base de donnée
+>     * Lier le dossier `/var/lib/postgresql` au volume `postgres`
+>     * Lier le dossier `/var/lib/postgresql/data` au volume `postgres_data`
+>     * Rediriger le port **5432** du container vers le **5432** du serveur
+>  * Pour la partie `volumes`
+>     * Création du volume `postgres`
+>     * Création du volume `postgres_data`
+
+* Pour construire le container et le deployer en localement
+
 ```bash
 docker-compose up --build -d
 ```
-* L'API est disponible à l'URL suivant : 
+
+* L'Application est disponible à l'URL suivant : 
+
 ```html
 http://localhost:7001/api/
 ```
+
+> **NB :** Les sources local sont liées à celle présente dans le container, du coup pas besoin de build de nouveau à chaque changement dans le code.
 
 ## Dépendances
 
