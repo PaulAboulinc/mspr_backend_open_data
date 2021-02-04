@@ -1,1 +1,6 @@
-# mspr_recipe_ci
+# MSPR - Recipe Backend
+
+## Pré-requis
+* Git
+* Docker et Docker Compose
+* 
