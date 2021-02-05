@@ -91,7 +91,7 @@ http://localhost:7001/api/
 | Junit              | 4.13.1  | Permet de réaliser les tests unitaires                          |
 | Jasper Reports     | 6.1.0   | Permet de générer des pdf                                       |
 | Log4j2             | 2.4.2   | Permet de générer et formatter les logs                         |
-| Plugin JaCoCo      | 0.8.5   | permet de calculer de code coverage (fonctionne avec sonarqube) |
+| Plugin JaCoCo      | 0.8.5   | permet de calculer le code coverage (fonctionne avec sonarqube) |
 
 ## Tests Unitaires
 
