@@ -82,14 +82,16 @@ http://localhost:7001/api/
 > **NB :** Les sources local sont liées à celle présente dans le container, du coup pas besoin de build de nouveau à chaque changement dans le code.
 
 ## Dépendances
-* Spring Web ==> permet de build (utilise apache tomcat)
-* PostgresSQL driver ==> driver pour se connecter
-* Spring Data JPA ==> Utilise Hibernate pour gérer la persistance
-* Springdoc openapi ==> permet de gérer la doc (swagger)
-* Junit == permet de faire les test unitaires
-* jasperreports ==> Permet de générer un pdf
-* log4j2 ==> Permet de générer et formatter les logs
-* plugin jacoco ==> permet de calculer de code coverage (fonctionne avec sonarqube)
+| Dépendance         | Version | Commentaire                                                     |
+|--------------------|---------|-----------------------------------------------------------------|
+| Spring Web         | 2.4.1   | permet de build (utilise apache tomcat)                         |
+| Spring Data JPA    | 2.4.1   | Utilise Hibernate pour gérer la persistance                     |
+| PostgresSQL driver | 42.2.18 | driver pour se connecter                                        |
+| Springdoc openapi  | 1.5.1   | Permet de générer la documentation                              |
+| Junit              | 4.13.1  | Permet de réaliser les tests unitaires                          |
+| Jasper Reports     | 6.1.0   | Permet de générer des pdf                                       |
+| Log4j2             | 2.4.2   | Permet de générer et formatter les logs                         |
+| Plugin JaCoCo      | 0.8.5   | permet de calculer de code coverage (fonctionne avec sonarqube) |
 
 ## Tests Unitaires
 
