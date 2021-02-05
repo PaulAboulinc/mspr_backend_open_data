@@ -95,6 +95,6 @@ public class RecipeController {
         Recipe recipe = recipeRepository.findById(id).orElseThrow(RecipeNotFound::new);
         recipeRepository.delete(recipe);
 
-        return "La recette " + recipe.getId() + " a été supprimée";
+        return "La recette " + recipe.getId() + " bien a été supprimée";
     }
 }
