@@ -94,11 +94,27 @@ http://localhost:7001/api/
 | Plugin JaCoCo      | 0.8.5   | Permet de calculer le code coverage (fonctionne avec sonarqube) |
 
 ## Tests Unitaires
+* comment tester
+* librairie utilisé (description)
+* rapide indication qu'on a code coverage (jacoco : rapport coverage)
+* bonne pratiques
 
 ## Outils de qualité du code
+Sonarqube 
+* Indiquer la conf pour expliquer comme la changer (pom.xml) => source a inclure ou exclure
+* Indiquer les règles importantes/bloquantes par défault et si il y en a, les customs
+ 
 
 ## Intégration continue
+* Redmine : Expliquer comment utiliser jenkins (créer un compte, lancer le build, ...)
+
+* Expliquer la stratégie du build (décrire jenkinsfile)
+* Indiquer que c'est automatique (hook) + autres règles s'il y en a
+
 
 ## Déploiment
+* à ajouter sur redmine de façon précise (ici on a déjà ce qu'il faut avec l'integration continue)
+
 
 ## Contribution ?
+* à ajouter sur redmine de façon précise 
