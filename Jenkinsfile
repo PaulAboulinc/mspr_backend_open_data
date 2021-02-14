@@ -3,12 +3,7 @@ pipeline {
     stages {
         stage('Build docker') {
             steps {
-                script {
-                    if (env.BRANCH_NAME != 'master') {
-                        sh 'docker-compose up --build -d'
-                    }
-                }
-                echo sh(script: 'env|sort', returnStdout: true)
+                sh 'docker-compose up --build -d'
             }
         }
         stage('Test') {
@@ -22,6 +17,9 @@ pipeline {
             }
         }
         stage('Build') {
+            when {
+                tag 'v.*'
+            }
             steps {
                 sh 'docker exec api_backend mvn -B -f /home/app/pom.xml -DskipTests package'
             }
