@@ -35,12 +35,12 @@ class RecipeApplicationTests {
 		recipe = controller.updateRecipe(recipe.getId());
 		assertThat(recipe.getName()).isEqualTo("name updated !!!");
 
-		String message = "La recette " + recipe.getId() + " a été supprimée";
+		String message = "La recette " + recipe.getId() + " a bien été supprimée";
 		assertThat(controller.deleteRecipe(recipe.getId())).isEqualTo(message);
 	}
 
 	@Test
-	void testException() throws RecipeNotFound {
+	void testException() {
 		RecipeNotFound recipeNotFound = new RecipeNotFound();
 		assertThat(recipeNotFound.getMessage()).isEqualTo("La recette n'a pas été trouvée");
 
