@@ -5,8 +5,6 @@ pipeline {
             steps {
                 sh 'docker-compose up --build -d'
                 echo sh(script: 'env|sort', returnStdout: true)
-                echo "Building $BRANCH_NAME"
-                echo "Building $TAG_NAME"
             }
         }
         stage('Test') {
