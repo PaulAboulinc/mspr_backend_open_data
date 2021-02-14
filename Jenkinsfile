@@ -18,7 +18,7 @@ pipeline {
         }
         stage('Build') {
             when {
-                tag 'v.*.*'
+                tag 'v*.*'
             }
             steps {
                 sh 'docker exec api_backend mvn -B -f /home/app/pom.xml -DskipTests package'
