@@ -10,6 +10,7 @@ pipeline {
                         sh 'docker-compose up --build -d'
                     }
                 }
+                echo sh(script: 'env|sort', returnStdout: true)
             }
         }
         stage('Test') {
