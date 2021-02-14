@@ -15,7 +15,7 @@ version: '3'
 services:
   app:
     build: .
-    container_name: recipe_back_mspr
+    container_name: api_backend
     depends_on:
       - dbpostgres
     links:
@@ -98,12 +98,12 @@ Afin de réaliser les tests unitaires sur le projet, nous avons utilisé Junit 4
 
 * Les tests doivent être lancée depuis le container docker, voici la commande à jouer : 
 ```shell
-docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml test
+docker exec api_backend mvn -B -f /home/app/pom.xml test
 ```
 
 * Afin d'obtenir un rapport du coverage à l'aide de JaCoCo, éxécuter la commande suivante :
 ```shell
-docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml jacoco:report
+docker exec api_backend mvn -B -f /home/app/pom.xml jacoco:report
 ```
 Puis ouvrez le fichier "target/site/jacoco/index.html" dans votre navigateur.
 

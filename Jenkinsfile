@@ -14,22 +14,22 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml test'
+                sh 'docker exec api_backend mvn -B -f /home/app/pom.xml test'
             }
         }
         stage('JaCoCo report') {
             steps {
-                sh 'docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml jacoco:report'
+                sh 'docker exec api_backend mvn -B -f /home/app/pom.xml jacoco:report'
             }
         }
         stage('Build') {
             steps {
-                sh 'docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml -DskipTests package'
+                sh 'docker exec api_backend mvn -B -f /home/app/pom.xml -DskipTests package'
             }
         }
         stage('SonarQube') {
             steps {
-                sh 'docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml sonar:sonar'
+                sh 'docker exec api_backend mvn -B -f /home/app/pom.xml sonar:sonar'
             }
         }
     }
@@ -39,7 +39,6 @@ pipeline {
                      subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
                      attachLog: true,
                      body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
-            sh 'docker-compose down'
         }
     }
 }

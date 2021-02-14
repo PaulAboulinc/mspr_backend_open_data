@@ -3,7 +3,7 @@ version: '3'
 services:
   backend:
     build: .
-    container_name: recipe_back_mspr
+    container_name: api_backend
     depends_on:
       - dbpostgres
     links:
