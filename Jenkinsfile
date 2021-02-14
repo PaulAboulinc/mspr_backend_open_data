@@ -3,12 +3,23 @@ pipeline {
     stages {
         stage('Build docker') {
             steps {
-                sh 'docker-compose up --build -d'
+                script {
+                    if (env.BRANCH_NAME == 'master') {
+                        sh 'docker-compose -f docker-composer.prod.yml up --build -d'
+                    } else {
+                        sh 'docker-compose up --build -d'
+                    }
+                }
             }
         }
         stage('Test') {
             steps {
                 sh 'docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml test'
+            }
+        }
+        stage('JaCoCo report') {
+            steps {
+                sh 'docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml jacoco:report'
             }
         }
         stage('Build') {
