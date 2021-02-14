@@ -4,9 +4,7 @@ pipeline {
         stage('Build docker') {
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'master') {
-                        sh 'docker-compose -f docker-composer.prod.yml up --build -d'
-                    } else {
+                    if (env.BRANCH_NAME != 'master') {
                         sh 'docker-compose up --build -d'
                     }
                 }
@@ -41,5 +39,6 @@ pipeline {
                      attachLog: true,
                      body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
         }
+        sh 'docker-compose down'
     }
 }

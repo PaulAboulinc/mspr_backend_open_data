@@ -1,0 +1,12 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build docker') {
+            steps {
+                script {
+                    sh 'docker-compose -f docker-composer.prod.yml up --build -d'
+                }
+            }
+        }
+    }
+}
