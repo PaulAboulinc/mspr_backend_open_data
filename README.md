@@ -94,10 +94,18 @@ http://localhost:7001/api/
 | Plugin JaCoCo      | 0.8.5   | Permet de calculer le code coverage (fonctionne avec sonarqube) |
 
 ## Tests Unitaires
-* comment tester
-* librairie utilisé (description)
-* rapide indication qu'on a code coverage (jacoco : rapport coverage)
-* bonne pratiques
+Afin de réaliser les tests unitaires sur le projet, nous avons utilisé Junit 4.13.1 associé à maven pour les exécuter. Nous utilisons également le plugin JaCoCo afin de calculer le code coverage et le stocker sous un format XML qui sera utilisé par SonarQube.
+
+* Les tests doivent être lancée depuis le container docker, voici la commande à jouer : 
+```shell
+docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml test
+```
+
+* Afin d'obtenir un rapport du coverage à l'aide de JaCoCo, éxécuter la commande suivante :
+```shell
+docker exec recipe_back_mspr mvn -B -f /home/app/pom.xml jacoco:report
+```
+Puis ouvrez le fichier "target/site/jacoco/index.html" dans votre navigateur.
 
 ## Outils de qualité du code
 Sonarqube 
@@ -114,7 +122,3 @@ Sonarqube
 
 ## Déploiment
 * à ajouter sur redmine de façon précise (ici on a déjà ce qu'il faut avec l'integration continue)
-
-
-## Contribution ?
-* à ajouter sur redmine de façon précise 
