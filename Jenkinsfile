@@ -10,7 +10,7 @@ pipeline {
             steps {
                 echo ENV_NAME
                 echo BRANCH_NAME
-//                 echo "${sh(script:'git tag --contains | head -1', returnStdout: true)}"
+                echo "${sh(script:'git tag --contains | head -1', returnStdout: true)}"
             }
         }
 //         stage('Build docker') {
