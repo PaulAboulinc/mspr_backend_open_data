@@ -11,7 +11,7 @@ services:
     volumes:
       -  ./:/home/app/
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres_integration:5432/databse
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres_integration:5434/database
       - SPRING_DATASOURCE_USERNAME=username
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -29,7 +29,7 @@ services:
       POSTGRES_USER: username
       POSTGRES_PASSWORD: password
     ports:
-      - 5432:5432
+      - 5434:5434
 
 volumes:
   postgres_data:
