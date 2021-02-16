@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        BRANCH_NAME = ${GIT_BRANCH,fullName=false}
+        BRANCH_NAME = ${env.GIT_BRANCH, fullName = false}
         ENV_NAME = "${BRANCH_NAME == "preprod" || BRANCH_NAME == "master" ? BRANCH_NAME : "integration"}"
         HAS_TAG = "${sh(script:'git tag --contains | head -1', returnStdout: true)}"
     }
