@@ -67,7 +67,7 @@ volumes:
 >     * Création du volume `postgres`
 >     * Création du volume `postgres_data`
 
-* Pour construire le container et le deployer en localement
+* Pour construire le container et le deployer en local
 
 ```bash
 docker-compose up --build -d
