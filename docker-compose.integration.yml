@@ -1,31 +1,26 @@
 version: '3'
 
 services:
-  app:
+  backend:
     build: .
-    container_name: api_backend_prod
+    container_name: api_backend_integration
     depends_on:
-      - dbpostgres_prod
+      - dbpostgres_integration
     links:
-      - dbpostgres_prod
+      - dbpostgres_integration
     volumes:
       -  ./:/home/app/
-    expose:
-      - 80
-    restart: always
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres_prod:5432/database
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres_integration:5432/databse
       - SPRING_DATASOURCE_USERNAME=username
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - VIRTUAL_PORT=8080
-      - VIRTUAL_HOST=api-recipe.nonstopintegration.ml
-      - LETSENCRYPT_HOST=api-recipe.nonstopintegration.ml
-      - LETSENCRYPT_EMAIL=nonstopintegration@gmail.com
+    ports:
+      - 7001:8080
 
-  dbpostgres_prod:
+  dbpostgres_integration:
     image: postgres:13.1-alpine
-    container_name: dbpostgres_prod
+    container_name: dbpostgres_integration
     volumes:
       - postgres:/var/lib/postgresql
       - postgres_data:/var/lib/postgresql/data
@@ -39,9 +34,3 @@ services:
 volumes:
   postgres_data:
   postgres:
-  app_data:
-
-networks:
-  default:
-    external:
-      name: webproxy
