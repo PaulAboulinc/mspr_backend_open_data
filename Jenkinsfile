@@ -31,7 +31,7 @@ pipeline {
                 sh 'docker exec api_backend_${ENV_NAME} mvn -B -f /home/app/pom.xml sonar:sonar'
             }
         }
-        stage('Down build container') {
+        stage('Down Build container') {
             when {
                 expression { ENV_NAME == 'build' }
             }
