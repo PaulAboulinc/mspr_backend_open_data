@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  app:
+  app_preprod:
     build: .
     container_name: api_backend_preprod
     depends_on:
@@ -39,7 +39,6 @@ services:
 volumes:
   postgres_data_preprod:
   postgres_preprod:
-  app_data:
 
 networks:
   default:
