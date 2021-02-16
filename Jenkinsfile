@@ -6,7 +6,7 @@ pipeline {
 //         HAS_TAG = "${sh(script:'git tag --contains | head -1', returnStdout: true)}"
     }
     stages {
-        stage('echo variables') {
+        stage('echo variables ') {
             steps {
                 echo ENV_NAME
                 echo BRANCH_NAME
