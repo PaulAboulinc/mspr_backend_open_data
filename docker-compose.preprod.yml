@@ -20,15 +20,15 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - VIRTUAL_PORT=8080
       - VIRTUAL_HOST=api-recipe.preprod.nonstopintegration.ml
-      - LETSENCRYPT_HOST=api-recipe.nonstopintegration.ml
+      - LETSENCRYPT_HOST=api-recipe.preprod.nonstopintegration.ml
       - LETSENCRYPT_EMAIL=nonstopintegration@gmail.com
 
   dbpostgres_preprod:
     image: postgres:13.1-alpine
     container_name: dbpostgres_preprod
     volumes:
-      - postgres:/var/lib/postgresql
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_preprod:/var/lib/postgresql
+      - postgres_data_preprod:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: database
       POSTGRES_USER: username
@@ -37,8 +37,8 @@ services:
       - 5433:5433
 
 volumes:
-  postgres_data:
-  postgres:
+  postgres_data_preprod:
+  postgres_preprod:
   app_data:
 
 networks:
