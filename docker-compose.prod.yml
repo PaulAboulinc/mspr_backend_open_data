@@ -5,16 +5,16 @@ services:
     build: .
     container_name: api_backend_prod
     depends_on:
-      - dbpostgres
+      - dbpostgres_prod
     links:
-      - dbpostgres
+      - dbpostgres_prod
     volumes:
       -  ./:/home/app/
     expose:
       - 80
     restart: always
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres:5432/database
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres_prod:5432/database
       - SPRING_DATASOURCE_USERNAME=username
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -23,12 +23,12 @@ services:
       - LETSENCRYPT_HOST=api-recipe.nonstopintegration.ml
       - LETSENCRYPT_EMAIL=nonstopintegration@gmail.com
 
-  dbpostgres:
+  dbpostgres_prod:
     image: postgres:13.1-alpine
-    container_name: dbpostgres
+    container_name: dbpostgres_prod
     volumes:
-      - postgres:/var/lib/postgresql
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_prod:/var/lib/postgresql
+      - postgres_data_prod:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: database
       POSTGRES_USER: username
@@ -37,8 +37,8 @@ services:
       - 5432:5432
 
 volumes:
-  postgres_data:
-  postgres:
+  postgres_data_prod:
+  postgres_prod:
   app_data:
 
 networks:
