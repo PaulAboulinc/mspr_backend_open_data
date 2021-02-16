@@ -3,24 +3,24 @@ version: '3'
 services:
   backend:
     build: .
-    container_name: api_backend_integration
+    container_name: api_backend_build
     depends_on:
-      - dbpostgres_integration
+      - dbpostgres_build
     links:
-      - dbpostgres_integration
+      - dbpostgres_build
     volumes:
       -  ./:/home/app/
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres_integration:5434/database
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres_build:5434/database
       - SPRING_DATASOURCE_USERNAME=username
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     ports:
       - 7001:8080
 
-  dbpostgres_integration:
+  dbpostgres_build:
     image: postgres:13.1-alpine
-    container_name: dbpostgres_integration
+    container_name: dbpostgres_build
     volumes:
       - postgres:/var/lib/postgresql
       - postgres_data:/var/lib/postgresql/data

@@ -3,7 +3,7 @@ pipeline {
     environment {
         GIT_TAG = "${sh(script:'git tag --contains | head -1', returnStdout: true).trim() ?: "null"}"
         BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"
-        ENV_NAME = "${BRANCH_NAME == "preprod" || (BRANCH_NAME == "prod" && GIT_TAG != "null") ? BRANCH_NAME : "integration"}"
+        ENV_NAME = "${BRANCH_NAME == "preprod" || (BRANCH_NAME == "prod" && GIT_TAG != "null") ? BRANCH_NAME : "build"}"
     }
     stages {
         stage('Build docker') {
@@ -22,7 +22,6 @@ pipeline {
             }
         }
         stage('Build') {
-            when { tag "release-*" }
             steps {
                 sh 'docker exec api_backend_${ENV_NAME} mvn -B -f /home/app/pom.xml -DskipTests package'
             }
@@ -32,9 +31,9 @@ pipeline {
                 sh 'docker exec api_backend_${ENV_NAME} mvn -B -f /home/app/pom.xml sonar:sonar'
             }
         }
-        stage('Down integration container') {
+        stage('Down build container') {
             when {
-                expression { ENV_NAME == 'integration' }
+                expression { ENV_NAME == 'build' }
             }
             steps {
                 sh 'docker-compose -f docker-compose.${ENV_NAME}.yml down'
