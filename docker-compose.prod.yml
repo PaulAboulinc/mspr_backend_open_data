@@ -14,9 +14,9 @@ services:
       - 80
     restart: always
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres:5432/database
-      - SPRING_DATASOURCE_USERNAME=username
-      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres:5432/cooking
+      - SPRING_DATASOURCE_USERNAME=cooking
+      - SPRING_DATASOURCE_PASSWORD=cooking
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - VIRTUAL_PORT=8080
       - VIRTUAL_HOST=api-recipe.nonstopintegration.ml
@@ -30,9 +30,9 @@ services:
       - postgres:/var/lib/postgresql
       - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: database
-      POSTGRES_USER: username
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: cooking
+      POSTGRES_USER: cooking
+      POSTGRES_PASSWORD: cooking
     ports:
       - 5432:5432
 
