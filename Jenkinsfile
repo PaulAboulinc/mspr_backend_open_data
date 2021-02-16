@@ -6,7 +6,7 @@ pipeline {
         ENV_NAME = "${BRANCH_NAME == "preprod" || (BRANCH_NAME == "prod" && GIT_TAG != "null") ? BRANCH_NAME : "integration"}"
     }
     stages {
-        stage('echo variables ') {
+        stage('echo variables') {
             steps {
                 echo GIT_TAG
                 echo BRANCH_NAME
