@@ -1,13 +1,15 @@
 pipeline {
     agent any
     environment {
-        ENV_NAME = "${env.BRANCH_NAME == "preprod" || env.BRANCH_NAME == "master" ? env.BRANCH_NAME : "integration"}"
-        HAS_TAG = "${sh(script:'git tag --contains | head -1', returnStdout: true).trim()}"
+        BRANCH_NAME = ${GIT_BRANCH,fullName=false}
+        ENV_NAME = "${BRANCH_NAME == "preprod" || BRANCH_NAME == "master" ? BRANCH_NAME : "integration"}"
+        HAS_TAG = "${sh(script:'git tag --contains | head -1', returnStdout: true)}"
     }
     stages {
         stage('echo variables') {
             steps {
                 echo ENV_NAME
+                echo BRANCH_NAME
                 echo HAS_TAG
             }
         }
