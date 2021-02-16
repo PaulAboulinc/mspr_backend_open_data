@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Build docker') {
             steps {
-                sh 'docker-compose -f ${ENV_NAME} up --build -d'
+                sh 'docker-compose -f docker-compose.${ENV_NAME}.yml up --build -d'
             }
         }
         stage('Test') {
@@ -37,7 +37,7 @@ pipeline {
                 expression { ENV_NAME == 'integration' }
             }
             steps {
-                sh 'docker-compose -f ${ENV_NAME} down'
+                sh 'docker-compose -f docker-compose.${ENV_NAME}.yml down'
             }
         }
     }
