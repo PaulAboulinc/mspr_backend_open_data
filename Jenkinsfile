@@ -1,16 +1,16 @@
 pipeline {
     agent any
     environment {
+        GIT_TAG= "${sh(script:'git tag --contains | head -1', returnStdout: true).trim():-null}"
         BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"
         ENV_NAME = "${BRANCH_NAME == "preprod" || BRANCH_NAME == "prod" ? BRANCH_NAME : "integration"}"
-        HAS_TAG = "${sh(script:'git tag --contains | head -1', returnStdout: true)}.trim()"
     }
     stages {
         stage('echo variables ') {
             steps {
                 echo ENV_NAME
                 echo BRANCH_NAME
-                echo HAS_TAG
+                echo GIT_TAG
             }
         }
 //         stage('Build docker') {
