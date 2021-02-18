@@ -13,22 +13,22 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'docker exec api_backend_${ENV_NAME} mvn -P${ENV_NAME -B -f /home/app/pom.xml test'
+                sh 'docker exec api_backend_${ENV_NAME} mvn -P${ENV_NAME} -B -f /home/app/pom.xml test'
             }
         }
         stage('JaCoCo report') {
             steps {
-                sh 'docker exec api_backend_${ENV_NAME} mvn -P${ENV_NAME -B -f /home/app/pom.xml jacoco:report'
+                sh 'docker exec api_backend_${ENV_NAME} mvn -P${ENV_NAME} -B -f /home/app/pom.xml jacoco:report'
             }
         }
         stage('Build') {
             steps {
-                sh 'docker exec api_backend_${ENV_NAME} mvn -P${ENV_NAME -B -f /home/app/pom.xml -DskipTests package'
+                sh 'docker exec api_backend_${ENV_NAME} mvn -P${ENV_NAME} -B -f /home/app/pom.xml -DskipTests package'
             }
         }
         stage('SonarQube') {
             steps {
-                sh 'docker exec api_backend_${ENV_NAME} mvn -P${ENV_NAME -B -f /home/app/pom.xml sonar:sonar'
+                sh 'docker exec api_backend_${ENV_NAME} mvn -P${ENV_NAME} -B -f /home/app/pom.xml sonar:sonar'
             }
         }
         stage('Down Build container') {
