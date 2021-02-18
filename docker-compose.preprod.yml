@@ -2,7 +2,10 @@ version: '3'
 
 services:
   app_preprod:
-    build: .
+    build:
+      context: .
+      args:
+        - ENV=preprod
     container_name: api_backend_preprod
     depends_on:
       - dbpostgres_preprod
@@ -34,7 +37,7 @@ services:
       POSTGRES_USER: username
       POSTGRES_PASSWORD: password
     ports:
-      - 5433:5433
+      - 5433:5432
 
 volumes:
   postgres_data_preprod:

@@ -5,7 +5,10 @@ FROM maven:3.6.0-jdk-8-slim AS build
 WORKDIR /home/app
 COPY src /home/app/src
 COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package -DskipTests
+ARG ENV
+RUN echo "mvn -f /home/app/pom.xml clean package -DskipTests -P$ENV" > build.sh
+RUN chmod +x build.sh
+RUN ./build.sh
 
 #
 # Package stage

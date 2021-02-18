@@ -2,7 +2,10 @@ version: '3'
 
 services:
   app_prod:
-    build: .
+    build:
+      context: .
+      args:
+        - ENV=prod
     container_name: api_backend_prod
     depends_on:
       - dbpostgres_prod
@@ -14,7 +17,7 @@ services:
       - 80
     restart: always
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres_prod:5432/database
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres_prod:5434/database
       - SPRING_DATASOURCE_USERNAME=username
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -34,7 +37,7 @@ services:
       POSTGRES_USER: username
       POSTGRES_PASSWORD: password
     ports:
-      - 5432:5432
+      - 5434:5432
 
 volumes:
   postgres_data_prod:
