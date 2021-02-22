@@ -26,7 +26,7 @@ pipeline {
                 sh 'docker exec api_backend_${ENV_NAME} mvn -P${ENV_NAME} -B -f /home/app/pom.xml -DskipTests package'
             }
         }
-        stage('SonarQube') {
+        stage('Sonarqube') {
             steps {
                 sh 'docker exec api_backend_${ENV_NAME} mvn -P${ENV_NAME} -B -f /home/app/pom.xml sonar:sonar'
             }
