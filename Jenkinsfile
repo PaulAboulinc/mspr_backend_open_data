@@ -43,6 +43,7 @@ pipeline {
             }
         }
         stage('Deploy') {
+            agent any
             when {
                 expression { ENV_NAME == 'preprod' || ENV_NAME == 'prod' }
             }
