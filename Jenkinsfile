@@ -2,14 +2,14 @@ pipeline {
     agent none
     environment {
         BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"
-        ENV_NAME = getEnvName(env.BRANCH_NAME)
+//         ENV_NAME = getEnvName(env.BRANCH_NAME)
     }
     stages {
         stage('Tests') {
             agent any
             steps {
                 echo BRANCH_NAME
-                echo ENV_NAME
+//                 echo ENV_NAME
             }
         }
         stage('Build') {
