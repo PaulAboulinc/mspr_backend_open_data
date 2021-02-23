@@ -7,7 +7,6 @@ pipeline {
     stages {
         stage('Build docker') {
             steps {
-                    echo GIT_TAG
                     echo BRANCH_NAME
                     echo ENV_NAME
                     echo sh(script: 'env|sort', returnStdout: true)
