@@ -8,17 +8,22 @@ pipeline {
         stage('Tests') {
             agent any
             steps {
-                echo sh(script: 'env|sort', returnStdout: true)
+                script {
+                    env.BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"
+                    env.ENV_NAME = getEnvName(env.BRANCH_NAME)
+//                 echo sh(script: 'env|sort', returnStdout: true)
+                }
             }
         }
-//         stage('Build') {
-//             agent {
-//                 docker { image 'maven:3.6.0-jdk-8-slim'}
-//             }
-//             steps {
-//                 sh 'mvn clean package -DskipTests -Pprod'
-//             }
-//         }
+        stage('Build') {
+            agent {
+                docker { image 'maven:3.6.0-jdk-8-slim'}
+            }
+            steps {
+                echo sh(script: 'env|sort', returnStdout: true)
+                sh 'mvn clean package -DskipTests -Pprod'
+            }
+        }
 //         stage('Test') {
 //             agent {
 //                 docker { image 'maven:3.6.0-jdk-8-slim'}
