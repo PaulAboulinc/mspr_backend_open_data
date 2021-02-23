@@ -6,7 +6,7 @@ pipeline {
         ENV_NAME = "${BRANCH_NAME == "preprod" || (BRANCH_NAME == "prod" && GIT_TAG != "null") ? BRANCH_NAME : "dev"}"
     }
     stages {
-            stage('test tag') {
+            stage('test tag ') {
                 when { tag "v*" }
                 steps {
                     echo sh(script: 'env|sort', returnStdout: true)
