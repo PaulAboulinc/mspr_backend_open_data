@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-        GIT_TAG = "${sh(script:'git tag --contains | head -1', returnStdout: true).trim() ?: "null"}"
+//         GIT_TAG = "${sh(script:'git tag --contains | head -1', returnStdout: true).trim() ?: "null"}"
+        GIT_TAG = "${sh(script:'git tag --sort version:refname | tail -1', returnStdout: true).trim() ?: "null"}"
         BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"
         ENV_NAME = "${BRANCH_NAME == "preprod" || (BRANCH_NAME == "prod" && GIT_TAG != "null") ? BRANCH_NAME : "dev"}"
     }
