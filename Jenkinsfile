@@ -5,17 +5,6 @@ pipeline {
         ENV_NAME = getEnvName(env.BRANCH_NAME)
     }
     stages {
-        stage('Set Environmnet'){
-            steps {
-                script {
-                    if (BRANCH_NAME.startsWith("release-")) {
-                        ENV_NAME = 'prod'
-                    } else if (BRANCH_NAME == "preprod") {
-                        ENV_NAME = 'preprod'
-                    }
-                }
-            }
-        }
         stage('Build docker') {
             steps {
                 sh 'docker-compose -f docker-compose.${ENV_NAME}.yml up --build -d '
