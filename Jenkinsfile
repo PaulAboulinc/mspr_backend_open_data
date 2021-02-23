@@ -20,22 +20,22 @@ pipeline {
                 sh 'mvn clean package -DskipTests -Pprod'
             }
         }
-//         stage('Test') {
-//             agent {
-//                 docker { image 'maven:3.6.0-jdk-8-slim'}
-//             }
-//             steps {
-//                 sh 'mvn -Pprod -B test'
-//             }
-//         }
-//         stage('JaCoCo report') {
-//             agent {
-//                 docker { image 'maven:3.6.0-jdk-8-slim'}
-//             }
-//             steps {
-//                 sh 'mvn -Pprod -B jacoco:report'
-//             }
-//         }
+        stage('Test') {
+            agent {
+                docker { image 'maven:3.6.0-jdk-8-slim'}
+            }
+            steps {
+                sh 'mvn -Pprod -B test'
+            }
+        }
+        stage('JaCoCo report') {
+            agent {
+                docker { image 'maven:3.6.0-jdk-8-slim'}
+            }
+            steps {
+                sh 'mvn -Pprod -B jacoco:report'
+            }
+        }
         stage('Sonarqube') {
             agent {
                 docker { image 'maven:3.6.0-jdk-8-slim'}
