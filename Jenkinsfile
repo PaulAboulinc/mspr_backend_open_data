@@ -1,9 +1,9 @@
 pipeline {
     agent none
-    environment {
-        BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"
-        ENV_NAME = getEnvName(env.BRANCH_NAME)
-    }
+//     environment {
+//         BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"
+//         ENV_NAME = getEnvName(env.BRANCH_NAME)
+//     }
     stages {
 //         stage('Build docker') {
 //             agent {
@@ -18,7 +18,7 @@ pipeline {
                 docker { image 'maven:3.6.0-jdk-8-slim'}
             }
             steps {
-                sh 'mvn -P${ENV_NAME} -B -DskipTests package'
+                sh 'mvn -Pprod -B -DskipTests package'
             }
         }
 //         stage('Test') {
