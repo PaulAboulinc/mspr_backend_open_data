@@ -10,7 +10,7 @@ pipeline {
                 expression { ENV_NAME == 'prod' }
             }
             steps {
-                dir("${env.WORKSPACE}/mspr_backend_pipeline_prod"){
+                dir("${env.WORKSPACE}/../mspr_backend_pipeline_prod"){
                     sh "pwd"
                 }
             }
