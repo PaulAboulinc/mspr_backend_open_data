@@ -9,6 +9,9 @@ pipeline {
         stage('Build docker') {
             steps {
                 sh 'docker-compose -f docker-compose.${ENV_NAME}.yml up --build -d'
+                echo ${GIT_TAG}
+                echo ${BRANCH_NAME}
+                echo sh(script: 'env|sort', returnStdout: true)
             }
         }
         stage('Test') {
