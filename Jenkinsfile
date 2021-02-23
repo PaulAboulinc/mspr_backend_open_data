@@ -17,7 +17,7 @@ pipeline {
                 docker { image 'maven:3.6.0-jdk-8-slim'}
             }
             steps {
-                sh 'mvn -Pprod -B -DskipTests package'
+                sh 'mvn -f /home/app/pom.xml clean package -DskipTests -Pprod'
             }
         }
 //         stage('Test') {
