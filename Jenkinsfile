@@ -5,7 +5,7 @@ pipeline {
         ENV_NAME = getEnvName(env.BRANCH_NAME)
     }
     stages {
-        stage('Use prod wordspace for releases') {
+        stage('Use prod workspace for releases') {
             when {
                 expression { ENV_NAME == 'prod' }
             }
