@@ -42,23 +42,23 @@ pipeline {
                 sh 'mvn -P${ENV_NAME} -B sonar:sonar'
             }
         }
-//         stage('Down Build container') {
-//             when {
-//                 expression { ENV_NAME == 'dev' }
-//             }
-//             steps {
-//                 sh 'docker-compose -f docker-compose.${ENV_NAME}.yml down'
-//             }
-//         }
+        stage('Deploy') {
+            when {
+                expression { ENV_NAME == 'preprod' || ENV_NAME == 'prod' }
+            }
+            steps {
+                sh 'docker-compose -f docker-compose.${ENV_NAME}.yml up --build -d'
+            }
+        }
     }
-//     post {
-//         always {
-//             emailext to: "nonstopintegration@gmail.com",
-//                      subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
-//                      attachLog: true,
-//                      body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
-//         }
-//     }
+    post {
+        always {
+            emailext to: "nonstopintegration@gmail.com",
+                     subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
+                     attachLog: true,
+                     body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
+        }
+    }
 }
 
 def getEnvName(branchName) {
