@@ -13,10 +13,9 @@ pipeline {
                     echo GIT_TAG
                     echo BRANCH_NAME
                     echo ENV_NAME
-                    echo tag
                 }
             }
-            stage('WHEN test tag') {
+            stage('WHEn test tag') {
                 when { tag "v*" }
                 steps {
                     echo sh(script: 'env|sort', returnStdout: true)
