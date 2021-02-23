@@ -7,7 +7,7 @@ pipeline {
         stage('Set Environmnet'){
             steps {
                 script {
-                    if (env.GIT_TAG && env.GIT_TAG.startsWith("release-")) {
+                    if (BRANCH_NAME.startsWith("release-")) {
                         ENV_NAME = 'prod'
                     } else if (BRANCH_NAME == "preprod") {
                         ENV_NAME = 'preprod'
