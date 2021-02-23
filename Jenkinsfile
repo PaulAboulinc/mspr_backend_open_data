@@ -21,6 +21,7 @@ pipeline {
         stage('Build docker') {
             steps {
                     echo BRANCH_NAME
+                    echo env.GIT_TAG
                     echo ENV_NAME
 //                     sh 'docker-compose -f docker-compose.${ENV_NAME}.yml up --build -d '
             }
