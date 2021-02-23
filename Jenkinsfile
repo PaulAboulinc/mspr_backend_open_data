@@ -1,17 +1,12 @@
 pipeline {
     agent none
-//     environment {
-//         BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"
-//         ENV_NAME = getEnvName(env.BRANCH_NAME)
-//     }
     stages {
-        stage('Tests') {
+        stage('Set environment') {
             agent any
             steps {
                 script {
                     env.BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"
                     env.ENV_NAME = getEnvName(env.BRANCH_NAME)
-//                 echo sh(script: 'env|sort', returnStdout: true)
                 }
             }
         }
@@ -20,34 +15,33 @@ pipeline {
                 docker { image 'maven:3.6.0-jdk-8-slim'}
             }
             steps {
-                echo sh(script: 'env|sort', returnStdout: true)
-                sh 'mvn clean package -DskipTests -Pprod'
+                sh 'mvn clean package -DskipTests -P${env.ENV_NAME}'
             }
         }
-//         stage('Test') {
-//             agent {
-//                 docker { image 'maven:3.6.0-jdk-8-slim'}
-//             }
-//             steps {
-//                 sh 'mvn -Pprod -B test'
-//             }
-//         }
-//         stage('JaCoCo report') {
-//             agent {
-//                 docker { image 'maven:3.6.0-jdk-8-slim'}
-//             }
-//             steps {
-//                 sh 'mvn -Pprod -B jacoco:report'
-//             }
-//         }
-//         stage('Sonarqube') {
-//             agent {
-//                 docker { image 'maven:3.6.0-jdk-8-slim'}
-//             }
-//             steps {
-//                 sh 'mvn -Pprod -B sonar:sonar'
-//             }
-//         }
+        stage('Test') {
+            agent {
+                docker { image 'maven:3.6.0-jdk-8-slim'}
+            }
+            steps {
+                sh 'mvn -P${env.ENV_NAME} -B test'
+            }
+        }
+        stage('JaCoCo report') {
+            agent {
+                docker { image 'maven:3.6.0-jdk-8-slim'}
+            }
+            steps {
+                sh 'mvn -P${env.ENV_NAME} -B jacoco:report'
+            }
+        }
+        stage('Sonarqube') {
+            agent {
+                docker { image 'maven:3.6.0-jdk-8-slim'}
+            }
+            steps {
+                sh 'mvn -P${env.ENV_NAME} -B sonar:sonar'
+            }
+        }
 //         stage('Down Build container') {
 //             when {
 //                 expression { ENV_NAME == 'dev' }
