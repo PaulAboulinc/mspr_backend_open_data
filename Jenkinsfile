@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"
-        ENV_NAME = 'dev'
+        ENV_NAME = getEnvName(env.BRANCH_NAME)
     }
     stages {
         stage('Set Environmnet'){
@@ -58,4 +58,14 @@ pipeline {
                      body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
         }
     }
+}
+
+def getEnvName(branchName) {
+    if (branchName.startsWith("release-")) {
+        return 'prod';
+    } else if (branchName == "preprod") {
+        return 'preprod';
+    }
+
+    return "dev";
 }
