@@ -2,13 +2,14 @@ pipeline {
     agent any
     environment {
         BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"
-        ENV = "${env.GIT_TAG != null ? "prod" : "dev"}"
+        ENV = "${env.GIT_TAG.startsWith("release-") ? "prod" : "dev"}"
         ENV_NAME = "${BRANCH_NAME == "preprod" ? BRANCH_NAME : ENV}"
     }
     stages {
         stage('Build docker') {
             steps {
                     echo BRANCH_NAME
+                    echo ENV
                     echo ENV_NAME
 //                     sh 'docker-compose -f docker-compose.${ENV_NAME}.yml up --build -d '
             }
