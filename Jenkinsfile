@@ -1,53 +1,67 @@
 pipeline {
-    agent any
+    agent none
     environment {
         BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"
         ENV_NAME = getEnvName(env.BRANCH_NAME)
     }
     stages {
-        stage('Build docker') {
-            steps {
-                sh 'docker-compose -f docker-compose.${ENV_NAME}.yml down'
-                sh 'docker-compose -f docker-compose.${ENV_NAME}.yml up --build -d'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'docker exec api_backend_${ENV_NAME} mvn -P${ENV_NAME} -B -f /home/app/pom.xml test'
-            }
-        }
-        stage('JaCoCo report') {
-            steps {
-                sh 'docker exec api_backend_${ENV_NAME} mvn -P${ENV_NAME} -B -f /home/app/pom.xml jacoco:report'
-            }
-        }
+//         stage('Build docker') {
+//             agent {
+//                 docker { image 'maven:3.6.0-jdk-8-slim'}
+//             }
+//             steps {
+//                 sh 'docker-compose -f docker-compose.${ENV_NAME}.yml up --build -d'
+//             }
+//         }
         stage('Build') {
-            steps {
-                sh 'docker exec api_backend_${ENV_NAME} mvn -P${ENV_NAME} -B -f /home/app/pom.xml -DskipTests package'
-            }
-        }
-        stage('Sonarqube') {
-            steps {
-                sh 'docker exec api_backend_${ENV_NAME} mvn -P${ENV_NAME} -B -f /home/app/pom.xml sonar:sonar'
-            }
-        }
-        stage('Down Build container') {
-            when {
-                expression { ENV_NAME == 'dev' }
+            agent {
+                docker { image 'maven:3.6.0-jdk-8-slim'}
             }
             steps {
-                sh 'docker-compose -f docker-compose.${ENV_NAME}.yml down'
+                sh 'mvn -P${ENV_NAME} -B -DskipTests package'
             }
         }
+//         stage('Test') {
+//             agent {
+//                 docker { image 'maven:3.6.0-jdk-8-slim'}
+//             }
+//             steps {
+//                 sh 'mvn -P${ENV_NAME} -B test'
+//             }
+//         }
+//         stage('JaCoCo report') {
+//             agent {
+//                 docker { image 'maven:3.6.0-jdk-8-slim'}
+//             }
+//             steps {
+//                 sh 'mvn -P${ENV_NAME} -B jacoco:report'
+//             }
+//         }
+//         stage('Sonarqube') {
+//             agent {
+//                 docker { image 'maven:3.6.0-jdk-8-slim'}
+//             }
+//             steps {
+//                 sh 'mvn -P${ENV_NAME} -B sonar:sonar'
+//             }
+//         }
+//         stage('Down Build container') {
+//             when {
+//                 expression { ENV_NAME == 'dev' }
+//             }
+//             steps {
+//                 sh 'docker-compose -f docker-compose.${ENV_NAME}.yml down'
+//             }
+//         }
     }
-    post {
-        always {
-            emailext to: "nonstopintegration@gmail.com",
-                     subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
-                     attachLog: true,
-                     body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
-        }
-    }
+//     post {
+//         always {
+//             emailext to: "nonstopintegration@gmail.com",
+//                      subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
+//                      attachLog: true,
+//                      body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
+//         }
+//     }
 }
 
 def getEnvName(branchName) {
