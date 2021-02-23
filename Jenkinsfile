@@ -10,8 +10,6 @@ pipeline {
             steps {
                     echo BRANCH_NAME
                     echo ENV_NAME
-                    echo env.GIT_TAG
-                    echo sh(script: 'env|sort', returnStdout: true)
 //                     sh 'docker-compose -f docker-compose.${ENV_NAME}.yml up --build -d '
             }
         }
