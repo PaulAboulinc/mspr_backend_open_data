@@ -5,16 +5,6 @@ pipeline {
         ENV_NAME = getEnvName(env.BRANCH_NAME)
     }
     stages {
-        stage('Use prod workspace for releases') {
-            when {
-                expression { ENV_NAME == 'prod' }
-            }
-            steps {
-                dir("${env.WORKSPACE}/../mspr_backend_pipeline_prod"){
-                    sh "pwd"
-                }
-            }
-        }
         stage('Build docker') {
             steps {
                 sh 'docker-compose -f docker-compose.${ENV_NAME}.yml up --build -d '
