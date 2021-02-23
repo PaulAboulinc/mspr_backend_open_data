@@ -7,7 +7,8 @@ pipeline {
     stages {
         stage('Build docker') {
             steps {
-                sh 'docker-compose -f docker-compose.${ENV_NAME}.yml up --build -d '
+                sh 'docker-compose -f docker-compose.${ENV_NAME}.yml down'
+                sh 'docker-compose -f docker-compose.${ENV_NAME}.yml up --build -d'
             }
         }
         stage('Test') {
