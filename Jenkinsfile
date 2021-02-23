@@ -2,7 +2,8 @@ pipeline {
     agent any
     environment {
         BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"
-        ENV_NAME = "${BRANCH_NAME == "preprod" ? BRANCH_NAME : ((env.GIT_TAG != "null") ? "prod" : "dev")}"
+        ENV = "${env.GIT_TAG != "null" ? "prod" : "dev"}"
+        ENV_NAME = "${BRANCH_NAME == "preprod" ? BRANCH_NAME : ENV}"
     }
     stages {
         stage('Build docker') {
