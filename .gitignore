@@ -2,6 +2,7 @@ HELP.md
 target/
 src/main/resources/jacoco/
 logs/
+*.versionsBackup
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

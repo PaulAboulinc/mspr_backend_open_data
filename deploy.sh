@@ -58,8 +58,8 @@ NEEDS_TAG=`git describe --contains $GIT_COMMIT 2>/dev/null`
 if [ -z "$NEEDS_TAG" ]; then
   mvn versions:set -DnewVersion=$NEW_TAG
   git commit -m "Deploy $NEW_TAG" pom.xml
-  echo "Tagged with $NEW_TAG"
   git tag $NEW_TAG
+  echo "Tagged with $NEW_TAG"
   git push --follow-tags
 else
   echo "Already a tag on this commit"
