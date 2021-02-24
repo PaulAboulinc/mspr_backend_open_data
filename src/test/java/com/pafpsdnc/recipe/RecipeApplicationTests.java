@@ -24,27 +24,27 @@ class RecipeApplicationTests {
 		assertThat(recipe.getDescription()).isEqualTo("test");
 		assertThat(recipe.getPortions()).isEqualTo(1);
 	}
-//
-//	@Test
-//	void testModelRecipeController() throws RecipeNotFound {
-//		assertThat(controller).isNotNull();
-//
-//		Recipe recipe = controller.createRecipe();
-//		assertThat(recipe).isNotNull();
-//
-//		recipe = controller.updateRecipe(recipe.getId());
-//		assertThat(recipe.getName()).isEqualTo("name updated !!!");
-//
-//		String message = "La recette " + recipe.getId() + " a bien été supprimée";
-//		assertThat(controller.deleteRecipe(recipe.getId())).isEqualTo(message);
-//	}
-//
-//	@Test
-//	void testException() {
-//		RecipeNotFound recipeNotFound = new RecipeNotFound();
-//		assertThat(recipeNotFound.getMessage()).isEqualTo("La recette n'a pas été trouvée");
-//
-//		RecipeNotFound recipeNotFound2 = new RecipeNotFound("test");
-//		assertThat(recipeNotFound2.getMessage()).isEqualTo("test");
-//	}
+
+	@Test
+	void testModelRecipeController() throws RecipeNotFound {
+		assertThat(controller).isNotNull();
+
+		Recipe recipe = controller.createRecipe();
+		assertThat(recipe).isNotNull();
+
+		recipe = controller.updateRecipe(recipe.getId());
+		assertThat(recipe.getName()).isEqualTo("name updated !!!");
+
+		String message = "La recette " + recipe.getId() + " a bien été supprimée";
+		assertThat(controller.deleteRecipe(recipe.getId())).isEqualTo(message);
+	}
+
+	@Test
+	void testException() {
+		RecipeNotFound recipeNotFound = new RecipeNotFound();
+		assertThat(recipeNotFound.getMessage()).isEqualTo("La recette n'a pas été trouvée");
+
+		RecipeNotFound recipeNotFound2 = new RecipeNotFound("test");
+		assertThat(recipeNotFound2.getMessage()).isEqualTo("test");
+	}
 }
