@@ -24,13 +24,6 @@ pipeline {
             }
             steps {
                 sh 'mvn -P${ENV_NAME} -B test'
-            }
-        }
-        stage('JaCoCo report') {
-            agent {
-                docker { image 'maven:3.6.0-jdk-8-slim'}
-            }
-            steps {
                 sh 'mvn -P${ENV_NAME} -B jacoco:report'
             }
         }

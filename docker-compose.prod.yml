@@ -1,5 +1,6 @@
 version: '3'
 
+project_name: api_backend_prod
 services:
   app_prod:
     build:
