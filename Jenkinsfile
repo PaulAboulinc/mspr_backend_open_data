@@ -36,7 +36,9 @@ pipeline {
 //             }
 //         }
         stage("Sonarqube") {
-            agent any
+            agent {
+                docker { image 'maven:3.6.0-jdk-8-slim'}
+            }
             steps {
                 withSonarQubeEnv('SonarQube') {
                     sh 'mvn -P${ENV_NAME} -B sonar:sonar'
