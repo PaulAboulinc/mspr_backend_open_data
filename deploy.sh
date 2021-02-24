@@ -63,7 +63,8 @@ if [ -z "$NEEDS_TAG" ]; then
   git commit -m "Deploy $NEW_TAG" pom.xml
   git tag $NEW_TAG
   echo "Tagged with $NEW_TAG"
-  git push --follow-tags
+  git push
+  git push --tags
 else
   echo "Already a tag on this commit"
 fi
