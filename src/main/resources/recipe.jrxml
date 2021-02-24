@@ -3,9 +3,9 @@
               xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
    http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
               name="report" topMargin="20" bottomMargin="20">
-    <parameter name="id" class="java.lang.Integer" />
+    <parameter name="ids" class="java.util.ArrayList" />
     <queryString>
-        <![CDATA[SELECT * FROM RECIPE WHERE id = $P{id} OR $P{id} IS NULL]]>
+        <![CDATA[SELECT * FROM RECIPE WHERE $X{IN, id, ids}]]>
     </queryString>
     <field name="ID" class="java.lang.Integer"/>
     <field name="PORTIONS" class="java.lang.Double"/>

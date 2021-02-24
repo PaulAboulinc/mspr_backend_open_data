@@ -15,8 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.*;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/recipes")
@@ -50,32 +51,22 @@ public class RecipeController {
 
     @GetMapping("/pdf")
     @ResponseStatus(HttpStatus.OK)
-    public void pdf(HttpServletResponse response) throws JRException, SQLException, IOException {
+    public void recipesPdf(HttpServletResponse response, @RequestBody Map<String, Object> responseData) throws JRException, SQLException, IOException {
         InputStream recipeStream = new ClassPathResource("recipe.jrxml").getInputStream();
         JasperReport jasperReport = JasperCompileManager.compileReport(recipeStream);
 
         String log = "PDF with all recipes";
+        if (responseData.containsKey("ids")) {
+            ArrayList<Integer> idsList = (ArrayList<Integer>) responseData.get("ids");
+            if (!idsList.isEmpty()) {
+                String ids = idsList.stream().distinct().sorted().map(String::valueOf).collect(Collectors.joining(","));
+                log = "PDF of recipes : " + ids;
+            }
+        }
+
         logger.trace(log);
 
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource.getConnection());
-        response.setContentType("application/x-download");
-        response.setHeader("Content-Disposition", "attachment; filename=\"recipe.pdf\"");
-        JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
-    }
-
-    @GetMapping("/pdf/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void pdf(HttpServletResponse response, @PathVariable Integer id) throws JRException, SQLException, IOException {
-        InputStream recipeStream = new ClassPathResource("recipe.jrxml").getInputStream();
-        JasperReport jasperReport = JasperCompileManager.compileReport(recipeStream);
-
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("id", id);
-
-        String log = "Export PDF of recipe id : " + id;
-        logger.trace(log);
-
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource.getConnection());
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, responseData, dataSource.getConnection());
         response.setContentType("application/x-download");
         response.setHeader("Content-Disposition", "attachment; filename=\"recipe.pdf\"");
         JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
