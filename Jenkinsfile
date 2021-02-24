@@ -25,6 +25,7 @@ pipeline {
             steps {
                 sh 'mvn -P${ENV_NAME} -B test'
                 sh 'mvn -P${ENV_NAME} -B jacoco:report'
+                junit '**/target/surefire-reports/TEST-*.xml'
             }
         }
         stage("Sonarqube") {
