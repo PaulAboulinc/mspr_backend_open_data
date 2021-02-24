@@ -23,7 +23,6 @@ fi
 CURRENT_VERSION = ${CURRENT_VERSION:8}
 echo "Current Version: release-$CURRENT_VERSION"
 
-
 #replace . with space so can split into an array
 CURRENT_VERSION_PARTS=(${CURRENT_VERSION//./ })
 
