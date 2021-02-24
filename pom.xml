@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.pafpsdnc</groupId>
 	<artifactId>recipe</artifactId>
-	<version>release-2.1.0</version>
+	<version>release-2.2.0</version>
 	<name>recipe</name>
 	<description>recipe project</description>
 
