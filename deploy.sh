@@ -19,7 +19,9 @@ if [[ $CURRENT_VERSION == '' ]]
 then
   CURRENT_VERSION='release-1.0.0'
 fi
-echo "Current Version: $CURRENT_VERSION"
+
+CURRENT_VERSION = ${CURRENT_VERSION:8}
+echo "Current Version: release-$CURRENT_VERSION"
 
 
 #replace . with space so can split into an array
@@ -49,8 +51,8 @@ fi
 
 
 #create new tag
-NEW_TAG="$VNUM1.$VNUM2.$VNUM3"
-echo "($VERSION) updating $CURRENT_VERSION to $NEW_TAG"
+NEW_TAG="release-$VNUM1.$VNUM2.$VNUM3"
+echo "($VERSION) updating release-$CURRENT_VERSION to $NEW_TAG"
 
 #get current hash and see if it already has a tag
 GIT_COMMIT=`git rev-parse HEAD`
