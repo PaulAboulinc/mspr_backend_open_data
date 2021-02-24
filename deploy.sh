@@ -13,14 +13,14 @@ do
 done
 
 #get highest tag number, and add 1.0.0 if doesn't exist
-CURRENT_VERSION=`git describe --abbrev=0 --tags 2>/dev/null`
+GITHUB_VERSION=`git describe --abbrev=0 --tags 2>/dev/null`
 
 if [[ $CURRENT_VERSION == '' ]]
 then
   CURRENT_VERSION='release-1.0.0'
 fi
 
-CURRENT_VERSION = ${CURRENT_VERSION:8}
+CURRENT_VERSION = ${GITHUB_VERSION:8}
 echo "Current Version: release-$CURRENT_VERSION"
 
 #replace . with space so can split into an array
