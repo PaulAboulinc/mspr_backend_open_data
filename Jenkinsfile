@@ -27,12 +27,20 @@ pipeline {
                 sh 'mvn -P${ENV_NAME} -B jacoco:report'
             }
         }
-        stage('Sonarqube') {
-            agent {
-                docker { image 'maven:3.6.0-jdk-8-slim'}
-            }
+//         stage('Sonarqube') {
+//             agent {
+//                 docker { image 'maven:3.6.0-jdk-8-slim'}
+//             }
+//             steps {
+//                 sh 'mvn -P${ENV_NAME} -B sonar:sonar'
+//             }
+//         }
+        stage("Sonarqube") {
+            agent any
             steps {
-                sh 'mvn -P${ENV_NAME} -B sonar:sonar'
+                withSonarQubeEnv('SonarQube') {
+                    sh 'mvn -P${ENV_NAME} -B sonar:sonar'
+                }
             }
         }
         stage('Deploy') {
