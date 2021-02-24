@@ -65,7 +65,6 @@ public class RecipeController {
         }
 
         logger.trace(log);
-
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, responseData, dataSource.getConnection());
         response.setContentType("application/x-download");
         response.setHeader("Content-Disposition", "attachment; filename=\"recipe.pdf\"");
