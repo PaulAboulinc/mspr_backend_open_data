@@ -6,8 +6,8 @@ services:
       context: .
       args:
         - ENV=prod
-    image: api_backend_prod
-    container_name: api_backend_prod
+    image: backend_prod
+    container_name: backend_prod
     depends_on:
       - dbpostgres_prod
     links:

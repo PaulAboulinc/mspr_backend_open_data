@@ -6,7 +6,7 @@ services:
       context: .
       args:
         - ENV=preprod
-    container_name: api_backend_preprod
+    container_name: backend_preprod
     depends_on:
       - dbpostgres_preprod
     links:

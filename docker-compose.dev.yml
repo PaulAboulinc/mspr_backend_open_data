@@ -1,13 +1,13 @@
 version: '3'
 
 services:
-  api_backed_dev:
+  backend_dev:
     build:
       context: .
       args:
         - ENV=dev
     network_mode: bridge
-    container_name: api_backend_dev
+    container_name: backend_dev
     depends_on:
       - dbpostgres_dev
     links:
