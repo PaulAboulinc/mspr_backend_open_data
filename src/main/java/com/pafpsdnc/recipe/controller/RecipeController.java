@@ -56,6 +56,7 @@ public class RecipeController {
         JasperReport jasperReport = JasperCompileManager.compileReport(recipeStream);
 
         String log = "PDF with all recipes";
+        log = "PDF with all recipes";
         if (responseData.containsKey("ids")) {
             ArrayList<Integer> idsList = (ArrayList<Integer>) responseData.get("ids");
             if (!idsList.isEmpty()) {
