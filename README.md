@@ -128,10 +128,22 @@ docker exec backend_dev mvn -B -f /home/app/pom.xml jacoco:report
 On peut ensuite accéder au résultat des tests au format HTML sur : http://localhost:7001/
 
 ## Outils de qualité du code
-Sonarqube 
-* Indiquer la conf pour expliquer comme la changer (pom.xml) => source a inclure ou exclure
-* Indiquer les règles importantes/bloquantes par défault et si il y en a, les customs
- 
+
+Pour vérifier la qualité du code, nous analysons celui-ci avec SonarQube qui est disponible sur l'url : https://sonarqube.nonstopintegration.ml
+
+Afin de configurer la connexion de notre projet à SonarQube,la localisation des informations fournis par les tests unitaires et jacoco ainsi que le langage du projet, nous avons ajouté les propriétés suivantes dans le fichier `pom.xml`: 
+```xml
+<sonar.projectKey>com.pafpsdnc:recipe</sonar.projectKey>  
+<sonar.host.url>https://sonarqube.nonstopintegration.ml</sonar.host.url>  
+<sonar.login>4f2a23bcf93a430dbf93c3f50d9af08f266fdade</sonar.login>  
+<sonar.junit.reportPaths>target/surefire-reports/</sonar.junit.reportPaths>  
+<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>  
+<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>  
+<sonar.coverage.jacoco.xmlReportPaths>
+	${project.basedir}/src/main/resources/jacoco/jacoco.xml
+</sonar.coverage.jacoco.xmlReportPaths>  
+<sonar.language>java</sonar.language>
+``` 
 
 ## Intégration continue
 L’intégration continue de projet est géré avec une pipeline `jenkins` multibranche disponible sur l'url : http://nonstopintegration.ml:8080/
