@@ -9,6 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @SpringBootTest
 class RecipeApplicationTests {
 	@Autowired
@@ -29,11 +32,17 @@ class RecipeApplicationTests {
 	void testModelRecipeController() throws RecipeNotFound {
 		assertThat(controller).isNotNull();
 
-		Recipe recipe = controller.createRecipe();
+		Map<String, Object> requestBody = new HashMap<>();
+		requestBody.put("portions", 1000);
+		requestBody.put("name", "name");
+		requestBody.put("description", "description");
+
+		Recipe recipe = controller.createRecipe(requestBody);
 		assertThat(recipe).isNotNull();
 
-		recipe = controller.updateRecipe(recipe.getId());
-		assertThat(recipe.getName()).isEqualTo("name updated !!!");
+		requestBody.put("name", "name updated");
+		recipe = controller.updateRecipe(recipe.getId(), requestBody);
+		assertThat(recipe.getName()).isEqualTo("name updated");
 
 		String message = "La recette " + recipe.getId() + " a bien été supprimée";
 		assertThat(controller.deleteRecipe(recipe.getId())).isEqualTo(message);

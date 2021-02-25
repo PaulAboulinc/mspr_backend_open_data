@@ -9,7 +9,7 @@ ADD pom.xml $HOME
 RUN ["/usr/local/bin/mvn-entrypoint.sh", "mvn", "verify", "clean", "--fail-never"]
 ADD . $HOME
 ARG ENV
-RUN echo "mvn package -DskipTests -P$ENV" > build.sh
+RUN echo "mvn clean package -DskipTests -P$ENV" > build.sh
 RUN chmod +x build.sh
 RUN ./build.sh
 

@@ -74,11 +74,11 @@ public class RecipeController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public Recipe createRecipe() {
+    public Recipe createRecipe(@RequestBody Map<String, Object> responseData) {
         Recipe recipe = new Recipe();
-        recipe.setPortions(1000);
-        recipe.setName("name");
-        recipe.setDescription("description");
+        recipe.setPortions((Integer) responseData.get("portions"));
+        recipe.setName((String) responseData.get("name"));
+        recipe.setDescription((String) responseData.get("description"));
 
         recipeRepository.save(recipe);
 
@@ -90,11 +90,12 @@ public class RecipeController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Recipe updateRecipe(@PathVariable("id") Integer id) throws RecipeNotFound {
+    public Recipe updateRecipe(@PathVariable("id") Integer id, @RequestBody Map<String, Object> responseData) throws RecipeNotFound {
         Recipe recipe = recipeRepository.findById(id).orElseThrow(RecipeNotFound::new);
 
-        recipe.setName("name updated !!!");
-        recipe.setDescription("description updated !!!");
+        recipe.setPortions((Integer) responseData.get("portions"));
+        recipe.setName((String) responseData.get("name"));
+        recipe.setDescription((String) responseData.get("description"));
         recipeRepository.save(recipe);
 
         String log = "Update : " + recipe.toString();
