@@ -36,15 +36,18 @@ pipeline {
                 withSonarQubeEnv('SonarQube') {
                     sh 'mvn -P${ENV_NAME} -B sonar:sonar'
                 }
-            }
-        }
-        stage("Sonarqube quality gate") {
-            steps {
                 timeout(time: 1, unit: 'HOURS') {
                     waitForQualityGate abortPipeline: true
                 }
             }
         }
+//         stage("Sonarqube quality gate") {
+//             steps {
+//                 timeout(time: 1, unit: 'HOURS') {
+//                     waitForQualityGate abortPipeline: true
+//                 }
+//             }
+//         }
         stage('Deploy') {
             agent any
             when {
