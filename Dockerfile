@@ -2,11 +2,14 @@
 # Build stage
 #
 FROM maven:3.6.0-jdk-8-slim AS build
-WORKDIR /home/app
-COPY src /home/app/src
-COPY pom.xml /home/app
+ENV HOME=/home/usr/app
+RUN mkdir -p $HOME
+WORKDIR $HOME
+ADD pom.xml $HOME
+RUN ["/usr/local/bin/mvn-entrypoint.sh", "mvn", "verify", "clean", "--fail-never"]
+ADD . $HOME
 ARG ENV
-RUN echo "mvn -f /home/app/pom.xml clean package -DskipTests -P$ENV" > build.sh
+RUN echo "mvn package -DskipTests -P$ENV" > build.sh
 RUN chmod +x build.sh
 RUN ./build.sh
 
@@ -15,6 +18,6 @@ RUN ./build.sh
 #
 FROM maven:3.6.0-jdk-8-slim
 WORKDIR /home/app
-COPY --from=build /home/app/target/*.jar /usr/local/lib/demo.jar
+COPY --from=build /home/usr/app/target/*.jar /usr/local/lib/demo.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/usr/local/lib/demo.jar"]

@@ -49,7 +49,7 @@ public class RecipeController {
         return recipeRepository.findAll();
     }
 
-    @GetMapping("/pdf")
+    @PostMapping("/pdf")
     @ResponseStatus(HttpStatus.OK)
     public void recipesPdf(HttpServletResponse response, @RequestBody Map<String, Object> responseData) throws JRException, SQLException, IOException {
         InputStream recipeStream = new ClassPathResource("recipe.jrxml").getInputStream();
