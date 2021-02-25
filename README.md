@@ -281,4 +281,4 @@ Le fonctionnement de notre intégration continue est le suivant :
 
 
 ## Exemple
-* Voici un exemple du projet installé sur un serveur : https://api-recipe.nonstopintegration.ml/swagger-ui/index.html?configUrl=/api-docs/swagger-config
+* Voici un exemple du projet installé sur un serveur : https://api-recipe.nonstopintegration.ml/swagger-ui.html
