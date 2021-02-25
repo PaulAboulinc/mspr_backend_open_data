@@ -154,6 +154,14 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.0.0-M5</version>
+				<configuration>
+					<systemPropertyVariables>
+						<spring.datasource.driver-class-name>org.h2.Driver</spring.datasource.driver-class-name>
+						<spring.datasource.url>jdbc:h2:mem:db;DB_CLOSE_DELAY=-1</spring.datasource.url>
+						<spring.datasource.username>sa</spring.datasource.username>
+						<spring.datasource.password>sa</spring.datasource.password>
+					</systemPropertyVariables>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>

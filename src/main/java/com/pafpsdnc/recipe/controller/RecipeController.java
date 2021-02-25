@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/recipes")
 public class RecipeController {
     @Autowired
