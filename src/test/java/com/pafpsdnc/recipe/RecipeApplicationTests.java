@@ -20,9 +20,9 @@ class RecipeApplicationTests {
 		recipe.setName("test");
 		recipe.setDescription("test");
 		recipe.setPortions(1);
-		assertThat(recipe.getName()).isEqualTo("test");
-		assertThat(recipe.getDescription()).isEqualTo("test");
-		assertThat(recipe.getPortions()).isEqualTo(1);
+		assertThat(recipe.getName()).isEqualTo("tesst");
+		assertThat(recipe.getDescription()).isEqualTo("tesst");
+		assertThat(recipe.getPortions()).isEqualTo(100);
 	}
 
 	@Test

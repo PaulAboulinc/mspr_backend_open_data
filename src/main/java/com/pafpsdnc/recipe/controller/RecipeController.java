@@ -26,7 +26,7 @@ public class RecipeController {
     private RecipeRepository recipeRepository;
 
     @Autowired
-    private Dat;aSource dataSource;
+    private DataSource dataSource;
 
     private final Logger logger = LoggerFactory.getLogger(RecipeController.class);
 
