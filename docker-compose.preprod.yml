@@ -1,46 +1,45 @@
 version: '3'
 
 services:
-  app_prod:
+  app_preprod:
     build:
       context: .
       args:
-        - ENV=prod
-    image: backend_prod
-    container_name: backend_prod
+        - ENV=preprod
+    container_name: backend_preprod
     depends_on:
-      - dbpostgres_prod
+      - dbpostgres_preprod
     links:
-      - dbpostgres_prod
+      - dbpostgres_preprod
     volumes:
       -  ./:/home/app/
     expose:
       - 80
     restart: always
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres_prod:5432/database
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres_preprod:5432/database
       - SPRING_DATASOURCE_USERNAME=username
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - VIRTUAL_PORT=8080
-      - VIRTUAL_HOST=api-recipe.nonstopintegration.ml
-      - LETSENCRYPT_HOST=api-recipe.nonstopintegration.ml
+      - VIRTUAL_HOST=api-recipe.preprod.nonstopintegration.ml
+      - LETSENCRYPT_HOST=api-recipe.preprod.nonstopintegration.ml
       - LETSENCRYPT_EMAIL=nonstopintegration@gmail.com
 
-  dbpostgres_prod:
+  dbpostgres_preprod:
     image: postgres:13.1-alpine
-    container_name: dbpostgres_prod
+    container_name: dbpostgres_preprod
     volumes:
-      - postgres_prod:/var/lib/postgresql
-      - postgres_data_prod:/var/lib/postgresql/data
+      - postgres_preprod:/var/lib/postgresql
+      - postgres_data_preprod:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: database
       POSTGRES_USER: username
       POSTGRES_PASSWORD: password
 
 volumes:
-  postgres_data_prod:
-  postgres_prod:
+  postgres_data_preprod:
+  postgres_preprod:
 
 networks:
   default:

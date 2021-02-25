@@ -48,4 +48,14 @@ public class Recipe {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "id=" + id +
+                ", portions=" + portions +
+                ", description='" + description + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

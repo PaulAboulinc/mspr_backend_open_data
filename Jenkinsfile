@@ -1,54 +1,72 @@
 pipeline {
-    agent any
-    environment {
-        BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"
-        ENV_NAME = "${BRANCH_NAME == "preprod" || BRANCH_NAME == "master" ? BRANCH_NAME : "integration"}"
-        HAS_TAG = "${sh(script:'git tag --contains | head -1', returnStdout: true)}"
-    }
+    agent none
     stages {
-        stage('echo variables') {
+        stage('Set environment') {
+            agent any
             steps {
-                echo ENV_NAME
-                echo BRANCH_NAME
-                echo HAS_TAG
+                script {
+                    env.BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"
+                    env.ENV_NAME = getEnvName(env.BRANCH_NAME)
+                }
             }
         }
-//         stage('Build docker') {
-//             steps {
-//                 sh 'docker-compose up --build -d'
-//                 echo ENV_NAME
-//                 echo HAS_TAG
-//             }
-//         }
-//         stage('Test') {
-//             steps {
-//                 sh 'docker exec api_backend mvn -B -f /home/app/pom.xml test'
-//             }
-//         }
-//         stage('JaCoCo report') {
-//             steps {
-//                 sh 'docker exec api_backend mvn -B -f /home/app/pom.xml jacoco:report'
-//             }
-//         }
-//         stage('Build') {
-//             when { tag "release-*" }
-//             steps {
-//                 sh 'docker exec api_backend mvn -B -f /home/app/pom.xml -DskipTests package'
-//             }
-//         }
-//         stage('SonarQube') {
-//             steps {
-//                 sh 'docker exec api_backend mvn -B -f /home/app/pom.xml sonar:sonar'
-//             }
-//         }
+        stage('Build') {
+            agent {
+                docker { image 'maven:3.6.0-jdk-8-slim'}
+            }
+            steps {
+                sh 'mvn clean package -DskipTests -P${ENV_NAME}'
+            }
+        }
+        stage('Test') {
+            agent {
+                docker { image 'maven:3.6.0-jdk-8-slim'}
+            }
+            steps {
+                sh 'mvn -P${ENV_NAME} -B test'
+                sh 'mvn -P${ENV_NAME} -B jacoco:report'
+                junit '**/target/surefire-reports/TEST-*.xml'
+            }
+        }
+        stage("Sonarqube") {
+            agent {
+                docker { image 'maven:3.6.0-jdk-8-slim'}
+            }
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh 'mvn -P${ENV_NAME} -B sonar:sonar'
+                }
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        stage('Deploy') {
+            agent any
+            when {
+                expression { ENV_NAME == 'preprod' || ENV_NAME == 'prod' }
+            }
+            steps {
+                sh 'docker-compose -p backend_${ENV_NAME} -f docker-compose.${ENV_NAME}.yml up --build -d'
+            }
+        }
     }
-//     post {
-//         always {
-//             emailext to: "paul.aboulinc@gmail.com",
-//                      subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
-//                      attachLog: true,
-//                      body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
-//             sh 'docker-compose down'
-//         }
-//     }
+    post {
+        always {
+            emailext to: "nonstopintegration@gmail.com",
+                     subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
+                     attachLog: true,
+                     body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
+        }
+    }
+}
+
+def getEnvName(branchName) {
+    if (branchName.startsWith("release-")) {
+        return 'prod';
+    } else if (branchName == "preprod") {
+        return 'preprod';
+    }
+
+    return "dev";
 }
