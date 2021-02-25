@@ -99,7 +99,7 @@ http://localhost:7001/api/
 ## Tests Unitaires
 Afin de réaliser les tests unitaires sur le projet, nous avons utilisé Junit 4.13.1 associé à maven pour les exécuter et à un base de données H2 pour le stockage des données. Nous utilisons également le plugin JaCoCo afin de calculer le code coverage et le stocker sous un format XML qui sera utilisé par SonarQube.
 
-La connexion à la base de données H2 est configurée dans le `pom.xml` : 
+* La connexion à la base de données H2 est configurée dans le `pom.xml` : 
 ```xml
 <plugin>  
 	<groupId>org.apache.maven.plugins</groupId>  
@@ -131,7 +131,7 @@ On peut ensuite accéder au résultat des tests au format HTML sur : http://loca
 
 Pour vérifier la qualité du code, nous analysons celui-ci avec SonarQube qui est disponible sur l'url : https://sonarqube.nonstopintegration.ml
 
-Afin de configurer la connexion de notre projet à SonarQube,la localisation des informations fournis par les tests unitaires et jacoco ainsi que le langage du projet, nous avons ajouté les propriétés suivantes dans le fichier `pom.xml`: 
+* Afin de configurer la connexion de notre projet à SonarQube,la localisation des informations fournis par les tests unitaires et jacoco ainsi que le langage du projet, nous avons ajouté les propriétés suivantes dans le fichier `pom.xml`: 
 ```xml
 <sonar.projectKey>com.pafpsdnc:recipe</sonar.projectKey>  
 <sonar.host.url>https://sonarqube.nonstopintegration.ml</sonar.host.url>  
