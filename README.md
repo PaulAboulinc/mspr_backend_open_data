@@ -7,7 +7,39 @@
 
 ## Installation de l'environnement de développement
 
-* Pour l'environnement local, utiliser le fichier `docker-compose.dev.yml`
+* Afin de conteneuriser notre application, nous avons créé le `Dockerfile` suivant : 
+```yml
+#  
+# Build stage  
+#  
+FROM maven:3.6.0-jdk-8-slim AS build  
+ENV HOME=/home/usr/app  
+RUN mkdir -p $HOME  
+WORKDIR $HOME  
+ADD pom.xml $HOME  
+RUN ["/usr/local/bin/mvn-entrypoint.sh", "mvn", "verify", "clean", "--fail-never"]  
+ADD . $HOME  
+ARG ENV  
+RUN echo "mvn clean package -DskipTests -P$ENV" > build.sh  
+RUN chmod +x build.sh  
+RUN ./build.sh  
+  
+#  
+# Package stage  
+#  
+FROM maven:3.6.0-jdk-8-slim  
+WORKDIR /home/app  
+COPY --from=build /home/usr/app/target/*.jar /usr/local/lib/demo.jar  
+EXPOSE 8080  
+ENTRYPOINT ["java","-jar","/usr/local/lib/demo.jar"]
+```
+> Ce fichier **Dockerfile** permet de :
+> * Construire un container docker avec l'image `maven:3.6.0-jdk-8-slim` en y intégrant notre code source
+> * Dans ce container, nous allons build ce code à l'aide de maven en spécifiant l'environnement
+> * Ensuite, nous construisons le container final ou sera utilisé, comme entrypoint, le jar de l'application construit dans l'étape précédente et exposé sur le port 8080
+
+
+* On utilise ensuite le fichier `docker-compose.dev.yml` (qui utilisera le `Dockerfile` pour build l'application)
 
 ```yml
 version: '3'  
@@ -248,5 +280,5 @@ Le fonctionnement de notre intégration continue est le suivant :
 * Un lien amenant au détail de la pipeline est également affichée et permet de consulter, en autre, les résultats des tests unitaires ou de l'analyse de sonarqube
 
 
-## Déploiment
-* à ajouter sur redmine de façon précise (ici on a déjà ce qu'il faut avec l'integration continue)
+## Exemple
+* Voici un exemple du projet installé sur un serveur : https://api-recipe.nonstopintegration.ml/swagger-ui/index.html?configUrl=/api-docs/swagger-config
