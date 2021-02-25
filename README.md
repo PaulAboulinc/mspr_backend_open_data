@@ -99,12 +99,21 @@ http://localhost:7001/api/
 ## Tests Unitaires
 Afin de réaliser les tests unitaires sur le projet, nous avons utilisé Junit 4.13.1 associé à maven pour les exécuter et à un base de données H2 pour le stockage des données. Nous utilisons également le plugin JaCoCo afin de calculer le code coverage et le stocker sous un format XML qui sera utilisé par SonarQube.
 
-La connexion à la base de données H2 est configurée à l'aide du fichier `/src/test/resources/application.properties` : 
-```properties
-spring.datasource.driver-class-name=org.h2.Driver  
-spring.datasource.url=jdbc:h2:mem:db;DB_CLOSE_DELAY=-1  
-spring.datasource.username=sa  
-spring.datasource.password=sa
+La connexion à la base de données H2 est configurée dans le `pom.xml` : 
+```xml
+<plugin>  
+	<groupId>org.apache.maven.plugins</groupId>  
+	<artifactId>maven-surefire-plugin</artifactId>  
+	<version>3.0.0-M5</version>  
+	<configuration>
+		<systemPropertyVariables>
+			<spring.datasource.driver-class-name>org.h2.Driver</spring.datasource.driver-class-name>  
+			<spring.datasource.url>jdbc:h2:mem:db;DB_CLOSE_DELAY=-1</spring.datasource.url>  
+			<spring.datasource.username>sa</spring.datasource.username>  
+			<spring.datasource.password>sa</spring.datasource.password>  
+		</systemPropertyVariables>
+	</configuration>
+</plugin>
 ```
 
 * Les tests doivent être lancée depuis le container docker, voici la commande à jouer : 
