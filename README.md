@@ -8,7 +8,7 @@
 ## Installation de l'environnement de développement
 
 * Afin de conteneuriser notre application, nous avons créé le `Dockerfile` suivant : 
-```yml
+```dockerfile
 #  
 # Build stage  
 #  
