@@ -28,13 +28,20 @@ pipeline {
                 junit '**/target/surefire-reports/TEST-*.xml'
             }
         }
-        stage("Sonarqube") {
+        stage("Sonarqube build and analysis") {
             agent {
                 docker { image 'maven:3.6.0-jdk-8-slim'}
             }
             steps {
                 withSonarQubeEnv('SonarQube') {
                     sh 'mvn -P${ENV_NAME} -B sonar:sonar'
+                }
+            }
+        }
+        stage("Sonarqube quality gate") {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
