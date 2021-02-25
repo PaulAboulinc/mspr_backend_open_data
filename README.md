@@ -225,15 +225,15 @@ def getEnvName(branchName) {
 >   * A partir d'un docker créé avec l'image `maven:3.6.0-jdk-8-slim`
 >   * En spécifiant l'option `-P${ENV_NAME}`
 >   * withSonarQubeEnv nous permet d'exécuter l'analyse sur l'environnement
->   * waitForQualityGate nous permet d'attendre la réponse de sonar et ainsi d'indiquer au build si ce stage doit échouer ou non
+>   * waitForQualityGate nous permet d'attendre la réponse de sonar et ainsi d'indiquer à la pipeline si ce stage doit échouer ou non
 > * De déployer notre application si l'environnement est la prod ou la préprod, sinon l'étape n'est pas effectuée. Nous utilisons la variable "ENV_NAME" pour utiliser le bon fichier "docker-compose"
-> * À la fin du build, un mail récap est envoyé en indiquant si le build est un success ou un fail. Ce mail est accompagné des logs du build en pièce jointe
+> * À la fin de la pipeline, un mail récap est envoyé en indiquant si la pipeline est un succès ou un échec. Ce mail est accompagné des logs de la pipeline en pièce jointe
 
 Le fonctionnement de notre intégration continue est le suivant :
 * Lorsqu'on push un commit ou un tag, un webhook sur notre projet github va s'activer et informer Jenkins qu'une branche a été mis à jour (avec le commit) ou qu'un nouveau tag est disponible.
-* Lorsque le webhook indique à jenkins les changements sur la nouvelle branche, celui-ci va automatiquement exécuter un job et vérifier si toutes les étapes passent.
-* Si on crée une Pull Request sur github, le dernier build effectué sur la branche sera automatiquement affiché dans la PR avec le statut de celui-ci : En cours, Succès ou Échec
-* Un lien amenant au détail du build est également affiché et permet de consulter, en autre, les résultats des tests unitaires ou de l'analyse de sonarqube
+* Lorsque le webhook indique à jenkins les changements sur la nouvelle branche, celui-ci va automatiquement exécuter la pipeline et vérifier si toutes les étapes passent.
+* Si on crée une Pull Request sur github, la dernière pipeline effectuée sur la branche sera automatiquement affiché dans la PR avec le statut de celui-ci : En cours, Succès ou Échec
+* Un lien amenant au détail de la pipeline est également affichée et permet de consulter, en autre, les résultats des tests unitaires ou de l'analyse de sonarqube
 
 
 ## Déploiment
