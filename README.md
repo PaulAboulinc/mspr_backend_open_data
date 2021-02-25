@@ -134,10 +134,106 @@ Sonarqube
  
 
 ## Intégration continue
-* Redmine : Expliquer comment utiliser jenkins (créer un compte, lancer le build, ...)
+L’intégration continue de projet est géré avec une pipeline `jenkins` multibranche disponible sur l'url : http://nonstopintegration.ml:8080/
 
-* Expliquer la stratégie du build (décrire jenkinsfile)
-* Indiquer que c'est automatique (hook) + autres règles s'il y en a
+* Le fichier `Jenkinsfile` nous permet de gérer cette pipeline : 
+```java
+pipeline {  
+    agent none  
+    stages {  
+        stage('Set environment') {  
+            agent any  
+            steps {  
+                script {  
+                    env.BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"  
+                    env.ENV_NAME = getEnvName(env.BRANCH_NAME)  
+                }  
+            }  
+        }  
+        stage('Build') {  
+            agent {  
+                docker { image 'maven:3.6.0-jdk-8-slim'}  
+            }  
+            steps {  
+                sh 'mvn clean package -DskipTests -P${ENV_NAME}'  
+            }  
+        }  
+        stage('Test') {  
+            agent {  
+                docker { image 'maven:3.6.0-jdk-8-slim'}  
+            }  
+            steps {  
+                sh 'mvn -P${ENV_NAME} -B test'  
+                sh 'mvn -P${ENV_NAME} -B jacoco:report'  
+                junit '**/target/surefire-reports/TEST-*.xml'  
+            }  
+        }  
+        stage("Sonarqube") {  
+            agent {  
+                docker { image 'maven:3.6.0-jdk-8-slim'}  
+            }  
+            steps {  
+                withSonarQubeEnv('SonarQube') {  
+                    sh 'mvn -P${ENV_NAME} -B sonar:sonar'  
+                }  
+                timeout(time: 5, unit: 'MINUTES') {  
+                    waitForQualityGate abortPipeline: true  
+                }  
+            }  
+        }  
+        stage('Deploy') {  
+            agent any  
+            when {  
+                expression { ENV_NAME == 'preprod' || ENV_NAME == 'prod' }  
+            }  
+            steps {  
+                sh 'docker-compose -p backend_${ENV_NAME} -f docker-compose.${ENV_NAME}.yml up --build -d'  
+            }  
+        }  
+    }  
+    post {  
+        always {  
+            emailext to: "nonstopintegration@gmail.com",  
+                     subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",  
+                     attachLog: true,  
+                     body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"        }  
+    }  
+}  
+  
+def getEnvName(branchName) {  
+    if (branchName.startsWith("release-")) {  
+        return 'prod';  
+    } else if (branchName == "preprod") {  
+        return 'preprod';  
+    }  
+  
+    return "dev";  
+}
+```
+> Ce fichier **Jenkinsfile** permet de créer une pipeline déclarative dont les différentes étapes sont :
+>
+> * De set les variables d'environnements :
+>   * `BRANCH_NAME` : Ici on retire le préfix "origin/" du nom de la  branche
+>   * `ENV_NAME` : On définit l'environnement (`prod`, `préprod` ou `dev`) en fonction du nom de la branche.
+> * De tester le build du projet : 
+>   * A partir d'un docker créé avec l'image `maven:3.6.0-jdk-8-slim`
+>   * En spécifiant l'option `-P${ENV_NAME}`
+> * D'exécuter les tests unitaire du projet et partager un rapport des résultats : 
+>   * A partir d'un docker créé avec l'image `maven:3.6.0-jdk-8-slim`
+>   * En spécifiant l'option `-P${ENV_NAME}`
+> * D'analyser la qualité du code avec SonarQube : 
+>   * A partir d'un docker créé avec l'image `maven:3.6.0-jdk-8-slim`
+>   * En spécifiant l'option `-P${ENV_NAME}`
+>   * withSonarQubeEnv nous permet d'exécuter l'analyse sur l'environnement
+>   * waitForQualityGate nous permet d'attendre la réponse de sonar et ainsi d'indiquer au build si ce stage doit échouer ou non
+> * De déployer notre application si l'environnement est la prod ou la préprod, sinon l'étape n'est pas effectuée. Nous utilisons la variable "ENV_NAME" pour utiliser le bon fichier "docker-compose"
+> * À la fin du build, un mail récap est envoyé en indiquant si le build est un success ou un fail. Ce mail est accompagné des logs du build en pièce jointe
+
+Le fonctionnement de notre intégration continue est le suivant :
+* Lorsqu'on push un commit ou un tag, un webhook sur notre projet github va s'activer et informer Jenkins qu'une branche a été mis à jour (avec le commit) ou qu'un nouveau tag est disponible.
+* Lorsque le webhook indique à jenkins les changements sur la nouvelle branche, celui-ci va automatiquement exécuter un job et vérifier si toutes les étapes passent.
+* Si on crée une Pull Request sur github, le dernier build effectué sur la branche sera automatiquement affiché dans la PR avec le statut de celui-ci : En cours, Succès ou Échec
+* Un lien amenant au détail du build est également affiché et permet de consulter, en autre, les résultats des tests unitaires ou de l'analyse de sonarqube
 
 
 ## Déploiment
