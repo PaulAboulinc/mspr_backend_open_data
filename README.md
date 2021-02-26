@@ -1,4 +1,5 @@
 
+
 # JAVA 8 Spring Boot Backend
 
 ### Sommaire :
@@ -137,9 +138,23 @@ http://localhost:7001/api/
 | Junit              | 4.13.1  | Permet de réaliser les tests unitaires                          |
 | H2database         | 1.4.200 | Base de données SQL pour JAVA, celle-ci est utilisée pour les tests unitaires |
 | Jasper Reports     | 6.1.0   | Permet de générer des pdf                                       |
-| Log4j2             | 2.4.2   | Permet de générer et formatter les logs                         |
+| Log4j2             | 2.4.2   | Permet de générer et formater les logs                         |
 | Plugin JaCoCo      | 0.8.5   | Permet de calculer le code coverage (fonctionne avec sonarqube) |
 
+## Logger
+
+Nous utilisons Log4j2 pour créer et formater les logs dans la console ainsi que dans un fichier (disponible dans le dossier `logs`). Cette configuration est faite dans le fichier `src/main/resources/log4j2.xml` avec les patterns suivants :
+
+- Pour les fichiers : 
+```xml
+%date{dd/mm/yyyy HH:mm:ss,SSS} %p (%C{1.}:%L) - %m%n
+```
+- Pour la console : 
+```xml
+%style{%d{ISO8601}}{white} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable
+```    
+
+On peut trouver les logs dans le fichier  : `/logs/spring-boot-logger-log4j2.log`
 
 ## Tests Unitaires
 Afin de réaliser les tests unitaires sur le projet, nous avons utilisé Junit 4.13.1 associé à maven pour les exécuter et à un base de données H2 pour le stockage des données. Nous utilisons également le plugin JaCoCo afin de calculer le code coverage et le stocker sous un format XML qui sera utilisé par SonarQube.
