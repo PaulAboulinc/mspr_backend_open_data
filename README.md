@@ -1,3 +1,4 @@
+
 # MSPR - Recipe Backend
 
 ## Pré-requis
@@ -182,6 +183,16 @@ L’intégration continue de projet est géré avec une pipeline `jenkins` multi
 
 * Le fichier `Jenkinsfile` nous permet de gérer cette pipeline : 
 ```java
+def getEnvName(branchName) {  
+    if (branchName.startsWith("release-")) {  
+        return 'prod';  
+    } else if (branchName == "preprod") {  
+        return 'preprod';  
+    }  
+  
+    return "dev";  
+}
+
 pipeline {  
     agent none  
     stages {  
@@ -243,16 +254,6 @@ pipeline {
                      body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"        }  
     }  
 }  
-  
-def getEnvName(branchName) {  
-    if (branchName.startsWith("release-")) {  
-        return 'prod';  
-    } else if (branchName == "preprod") {  
-        return 'preprod';  
-    }  
-  
-    return "dev";  
-}
 ```
 > Ce fichier **Jenkinsfile** permet de créer une pipeline déclarative dont les différentes étapes sont :
 >
