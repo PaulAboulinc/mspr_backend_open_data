@@ -7,7 +7,39 @@
 
 ## Installation de l'environnement de développement
 
-* Pour l'environnement local, utiliser le fichier `docker-compose.dev.yml`
+* Afin de conteneuriser notre application, nous avons créé le `Dockerfile` suivant : 
+```dockerfile
+#  
+# Build stage  
+#  
+FROM maven:3.6.0-jdk-8-slim AS build  
+ENV HOME=/home/usr/app  
+RUN mkdir -p $HOME  
+WORKDIR $HOME  
+ADD pom.xml $HOME  
+RUN ["/usr/local/bin/mvn-entrypoint.sh", "mvn", "verify", "clean", "--fail-never"]  
+ADD . $HOME  
+ARG ENV  
+RUN echo "mvn clean package -DskipTests -P$ENV" > build.sh  
+RUN chmod +x build.sh  
+RUN ./build.sh  
+  
+#  
+# Package stage  
+#  
+FROM maven:3.6.0-jdk-8-slim  
+WORKDIR /home/app  
+COPY --from=build /home/usr/app/target/*.jar /usr/local/lib/demo.jar  
+EXPOSE 8080  
+ENTRYPOINT ["java","-jar","/usr/local/lib/demo.jar"]
+```
+> Ce fichier **Dockerfile** permet de :
+> * Construire un container docker avec l'image `maven:3.6.0-jdk-8-slim` en y intégrant notre code source
+> * Dans ce container, nous allons build ce code à l'aide de maven en spécifiant l'environnement
+> * Ensuite, nous construisons le container final ou sera utilisé, comme entrypoint, le jar de l'application construit dans l'étape précédente et exposé sur le port 8080
+
+
+* On utilise ensuite le fichier `docker-compose.dev.yml` (qui utilisera le `Dockerfile` pour build l'application)
 
 ```yml
 version: '3'  
@@ -99,7 +131,7 @@ http://localhost:7001/api/
 ## Tests Unitaires
 Afin de réaliser les tests unitaires sur le projet, nous avons utilisé Junit 4.13.1 associé à maven pour les exécuter et à un base de données H2 pour le stockage des données. Nous utilisons également le plugin JaCoCo afin de calculer le code coverage et le stocker sous un format XML qui sera utilisé par SonarQube.
 
-La connexion à la base de données H2 est configurée dans le `pom.xml` : 
+* La connexion à la base de données H2 est configurée dans le `pom.xml` : 
 ```xml
 <plugin>  
 	<groupId>org.apache.maven.plugins</groupId>  
@@ -128,17 +160,125 @@ docker exec backend_dev mvn -B -f /home/app/pom.xml jacoco:report
 On peut ensuite accéder au résultat des tests au format HTML sur : http://localhost:7001/
 
 ## Outils de qualité du code
-Sonarqube 
-* Indiquer la conf pour expliquer comme la changer (pom.xml) => source a inclure ou exclure
-* Indiquer les règles importantes/bloquantes par défault et si il y en a, les customs
- 
+
+Pour vérifier la qualité du code, nous analysons celui-ci avec SonarQube qui est disponible sur l'url : https://sonarqube.nonstopintegration.ml
+
+* Afin de configurer la connexion de notre projet à SonarQube,la localisation des informations fournis par les tests unitaires et jacoco ainsi que le langage du projet, nous avons ajouté les propriétés suivantes dans le fichier `pom.xml`: 
+```xml
+<sonar.projectKey>com.pafpsdnc:recipe</sonar.projectKey>  
+<sonar.host.url>https://sonarqube.nonstopintegration.ml</sonar.host.url>  
+<sonar.login>4f2a23bcf93a430dbf93c3f50d9af08f266fdade</sonar.login>  
+<sonar.junit.reportPaths>target/surefire-reports/</sonar.junit.reportPaths>  
+<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>  
+<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>  
+<sonar.coverage.jacoco.xmlReportPaths>
+	${project.basedir}/src/main/resources/jacoco/jacoco.xml
+</sonar.coverage.jacoco.xmlReportPaths>  
+<sonar.language>java</sonar.language>
+``` 
 
 ## Intégration continue
-* Redmine : Expliquer comment utiliser jenkins (créer un compte, lancer le build, ...)
+L’intégration continue de projet est géré avec une pipeline `jenkins` multibranche disponible sur l'url : http://nonstopintegration.ml:8080/
 
-* Expliquer la stratégie du build (décrire jenkinsfile)
-* Indiquer que c'est automatique (hook) + autres règles s'il y en a
+* Le fichier `Jenkinsfile` nous permet de gérer cette pipeline : 
+```java
+pipeline {  
+    agent none  
+    stages {  
+        stage('Set environment') {  
+            agent any  
+            steps {  
+                script {  
+                    env.BRANCH_NAME = "${env.GIT_BRANCH.replaceFirst(/^.*\//, '')}"  
+                    env.ENV_NAME = getEnvName(env.BRANCH_NAME)  
+                }  
+            }  
+        }  
+        stage('Build') {  
+            agent {  
+                docker { image 'maven:3.6.0-jdk-8-slim'}  
+            }  
+            steps {  
+                sh 'mvn clean package -DskipTests -P${ENV_NAME}'  
+            }  
+        }  
+        stage('Test') {  
+            agent {  
+                docker { image 'maven:3.6.0-jdk-8-slim'}  
+            }  
+            steps {  
+                sh 'mvn -P${ENV_NAME} -B test'  
+                sh 'mvn -P${ENV_NAME} -B jacoco:report'  
+                junit '**/target/surefire-reports/TEST-*.xml'  
+            }  
+        }  
+        stage("Sonarqube") {  
+            agent {  
+                docker { image 'maven:3.6.0-jdk-8-slim'}  
+            }  
+            steps {  
+                withSonarQubeEnv('SonarQube') {  
+                    sh 'mvn -P${ENV_NAME} -B sonar:sonar'  
+                }  
+                timeout(time: 5, unit: 'MINUTES') {  
+                    waitForQualityGate abortPipeline: true  
+                }  
+            }  
+        }  
+        stage('Deploy') {  
+            agent any  
+            when {  
+                expression { ENV_NAME == 'preprod' || ENV_NAME == 'prod' }  
+            }  
+            steps {  
+                sh 'docker-compose -p backend_${ENV_NAME} -f docker-compose.${ENV_NAME}.yml up --build -d'  
+            }  
+        }  
+    }  
+    post {  
+        always {  
+            emailext to: "nonstopintegration@gmail.com",  
+                     subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",  
+                     attachLog: true,  
+                     body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"        }  
+    }  
+}  
+  
+def getEnvName(branchName) {  
+    if (branchName.startsWith("release-")) {  
+        return 'prod';  
+    } else if (branchName == "preprod") {  
+        return 'preprod';  
+    }  
+  
+    return "dev";  
+}
+```
+> Ce fichier **Jenkinsfile** permet de créer une pipeline déclarative dont les différentes étapes sont :
+>
+> * De set les variables d'environnements :
+>   * `BRANCH_NAME` : Ici on retire le préfix "origin/" du nom de la  branche
+>   * `ENV_NAME` : On définit l'environnement (`prod`, `préprod` ou `dev`) en fonction du nom de la branche.
+> * De tester le build du projet : 
+>   * A partir d'un docker créé avec l'image `maven:3.6.0-jdk-8-slim`
+>   * En spécifiant l'option `-P${ENV_NAME}`
+> * D'exécuter les tests unitaire du projet et partager un rapport des résultats : 
+>   * A partir d'un docker créé avec l'image `maven:3.6.0-jdk-8-slim`
+>   * En spécifiant l'option `-P${ENV_NAME}`
+> * D'analyser la qualité du code avec SonarQube : 
+>   * A partir d'un docker créé avec l'image `maven:3.6.0-jdk-8-slim`
+>   * En spécifiant l'option `-P${ENV_NAME}`
+>   * withSonarQubeEnv nous permet d'exécuter l'analyse sur l'environnement
+>   * waitForQualityGate nous permet d'attendre la réponse de sonar et ainsi d'indiquer à la pipeline si ce stage doit échouer ou non
+> * De déployer notre application si l'environnement est la prod ou la préprod, sinon l'étape n'est pas effectuée. Nous utilisons la variable "ENV_NAME" pour utiliser le bon fichier "docker-compose"
+> * À la fin de la pipeline, un mail récap est envoyé en indiquant si la pipeline est un succès ou un échec. Ce mail est accompagné des logs de la pipeline en pièce jointe
+
+Le fonctionnement de notre intégration continue est le suivant :
+* Lorsqu'on push un commit ou un tag, un webhook sur notre projet github va s'activer et informer Jenkins qu'une branche a été mis à jour (avec le commit) ou qu'un nouveau tag est disponible.
+* Lorsque le webhook indique à jenkins les changements sur la nouvelle branche, celui-ci va automatiquement exécuter la pipeline et vérifier si toutes les étapes passent.
+* Si on crée une Pull Request sur github, la dernière pipeline effectuée sur la branche sera automatiquement affiché dans la PR avec le statut de celui-ci : En cours, Succès ou Échec
+* Un lien amenant au détail de la pipeline est également affichée et permet de consulter, en autre, les résultats des tests unitaires ou de l'analyse de sonarqube
 
 
-## Déploiment
-* à ajouter sur redmine de façon précise (ici on a déjà ce qu'il faut avec l'integration continue)
+## Exemple
+* Voici un exemple du projet installé sur un serveur : https://api-recipe.nonstopintegration.ml/swagger-ui.html
