@@ -251,7 +251,8 @@ pipeline {
             emailext to: "nonstopintegration@gmail.com",  
                      subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",  
                      attachLog: true,  
-                     body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"        }  
+                     body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
+         }  
     }  
 }  
 ```
