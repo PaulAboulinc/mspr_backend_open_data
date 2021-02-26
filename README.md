@@ -140,8 +140,12 @@ Afin de réaliser les tests unitaires sur le projet, nous avons utilisé Junit 4
 	<version>3.0.0-M5</version>  
 	<configuration>
 		<systemPropertyVariables>
-			<spring.datasource.driver-class-name>org.h2.Driver</spring.datasource.driver-class-name>  
-			<spring.datasource.url>jdbc:h2:mem:db;DB_CLOSE_DELAY=-1</spring.datasource.url>  
+			<spring.datasource.driver-class-name>
+				org.h2.Driver
+			</spring.datasource.driver-class-name>  
+			<spring.datasource.url>
+				jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+			</spring.datasource.url>  
 			<spring.datasource.username>sa</spring.datasource.username>  
 			<spring.datasource.password>sa</spring.datasource.password>  
 		</systemPropertyVariables>
@@ -242,16 +246,19 @@ pipeline {
                 expression { ENV_NAME == 'preprod' || ENV_NAME == 'prod' }  
             }  
             steps {  
-                sh 'docker-compose -p backend_${ENV_NAME} -f docker-compose.${ENV_NAME}.yml up --build -d'  
+                sh 'docker-compose -p backend_${ENV_NAME} -f \
+                 docker-compose.${ENV_NAME}.yml up --build -d'  
             }  
         }  
     }  
     post {  
         always {  
             emailext to: "nonstopintegration@gmail.com",  
-                     subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",  
+                     subject: "Jenkins Build ${currentBuild.currentResult}: \
+		                       Job ${env.JOB_NAME}",  
                      attachLog: true,  
-                     body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
+                     body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build \
+                            ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
          }  
     }  
 }  
