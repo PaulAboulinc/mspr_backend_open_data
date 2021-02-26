@@ -1,5 +1,5 @@
 
-# MSPR - Recipe Backend
+# JAVA 8 Spring Boot Backend
 
 ## Pré-requis
 
