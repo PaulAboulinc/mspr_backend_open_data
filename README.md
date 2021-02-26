@@ -176,15 +176,20 @@ Nous utilisons Log4j2 pour créer et formater les logs dans la console ainsi que
 ```
 
 - Pour les fichiers, le pattern suivant est utilisé : 
-```xml
+```c++
 %date{dd/mm/yyyy HH:mm:ss,SSS} %p (%C{1.}:%L) - %m%n
 ```
 - Pour la console, le pattern est utilisé : 
-```xml
+```c++
 %style{%d{ISO8601}}{white} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable
 ```    
 
-On peut trouver les logs dans le fichier  : `/logs/spring-boot-logger-log4j2.log`
+- On peut trouver les logs dans le fichier  : `/logs/spring-boot-logger-log4j2.log`
+
+- Exemple de log :
+```bash
+26/05/2021 14:05:20,905 TRACE (c.p.r.c.RecipeController:39) - Show : Recipe{id=5, portions=50, description='Lots de 50 taboulet au poulet', name='Taboulet au poulet'}
+```
 
 ## Tests Unitaires
 Afin de réaliser les tests unitaires sur le projet, nous avons utilisé Junit 4.13.1 associé à maven pour les exécuter et à un base de données H2 pour le stockage des données. Nous utilisons également le plugin JaCoCo afin de calculer le code coverage et le stocker sous un format XML qui sera utilisé par SonarQube.
