@@ -1,3 +1,13 @@
+def getEnvName(branchName) {
+    if (branchName.startsWith("release-")) {
+        return 'prod';
+    } else if (branchName == "preprod") {
+        return 'preprod';
+    }
+
+    return "dev";
+}
+
 pipeline {
     agent none
     stages {
@@ -59,14 +69,4 @@ pipeline {
                      body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}"
         }
     }
-}
-
-def getEnvName(branchName) {
-    if (branchName.startsWith("release-")) {
-        return 'prod';
-    } else if (branchName == "preprod") {
-        return 'preprod';
-    }
-
-    return "dev";
 }
