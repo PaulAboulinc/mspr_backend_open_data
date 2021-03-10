@@ -10,7 +10,7 @@
 * [Tests Unitaires](#tests-unitaires)
 * [Outils de qualité du code](#outils-de-qualité-du-code)
 * [Intégration continue](#intégration-continue)
-* [Exemple](#exemple)
+* [Utilisation de Swagger](#utilisation-de-swagger)
 
 -----------------------------------------------------------------------------------------------------
 
@@ -351,5 +351,14 @@ pipeline {
 * Un lien amenant au détail de la pipeline est également affichée et permet de consulter, en autre, les résultats des tests unitaires ou de l'analyse de sonarqube
 
 
-## Exemple
-* Voici un exemple du projet installé sur un serveur : https://api-recipe.nonstopintegration.ml/swagger-ui.html
+## Utilisation de Swagger
+
+Afin de documenter la partie backend de notre application de façon automatique nous avons installé Swagger. Swagger peut être installé avec beaucoup de technologies dont Spring boot et permet d'analyser et de documenter automatiquement une API. Afin de visualiser cette documentation, on peut récupérer celle-ci au format :
+
+* JSON sur la route : https://api-recipe.nonstopintegration.ml/api-docs
+* YAML sur la route : https://api-recipe.nonstopintegration.ml/api-docs.yaml
+* HTML sur la route : https://api-recipe.nonstopintegration.ml/swagger-ui.html
+
+### Exemple du format HTML
+
+![Capture du 2021-03-10 19-58-13](https://nsa40.casimages.com/img/2021/03/10//210310080851135426.png)
