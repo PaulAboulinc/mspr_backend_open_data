@@ -1,8 +1,10 @@
 package com.pafpsdnc.opendata.controller;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
+import com.pafpsdnc.opendata.exception.OpenDataNotFound;
 import com.pafpsdnc.opendata.model.OpenData;
 import com.pafpsdnc.opendata.repository.OpenDataRepository;
-import com.pafpsdnc.opendata.exception.OpenDataNotFound;
 import net.sf.jasperreports.engine.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,12 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -102,6 +108,39 @@ public class OpenDataController {
         logger.trace(log);
 
         return openData;
+    }
+
+    @PostMapping("/import")
+    @ResponseStatus(HttpStatus.OK)
+    public String importOpenData(@RequestParam("file") MultipartFile file) throws IOException, CsvException {
+        if (file.isEmpty()) {
+            logger.trace("Import CSV : file not found");
+            return "Import CSV has ended with errors";
+        } else {
+            logger.trace("Import CSV : file found, import is starting");
+        }
+
+        CSVReader csvReader = new CSVReader(new InputStreamReader(file.getInputStream()));
+        List<String[]> openDataList = csvReader.readAll();
+        int lineCount = 1;
+        for (String[] row : openDataList) {
+            if (lineCount == 1) {
+                lineCount++;
+                continue;
+            }
+
+            OpenData openData = new OpenData();
+            openData.setUniqId(Integer.parseInt(row[0]));
+            openData.setName(row[1]);
+            openData.setValue(row[2]);
+            openDataRepository.save(openData);
+
+            String trace = "Line " + lineCount + " : Saved.";
+            logger.trace(trace);
+            lineCount++;
+        }
+
+        return "Import CSV has ended with success";
     }
 
     @DeleteMapping("/{id}")
