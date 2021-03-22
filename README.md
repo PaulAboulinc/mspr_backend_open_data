@@ -170,7 +170,7 @@ Nous utilisons Log4j2 pour créer et formater les logs dans la console ainsi que
  <AppenderRef ref="Console" />  
  <AppenderRef ref="RollingFile" />  
  </Root>  
- <Logger name="com.pafpsdnc.recipe" level="trace"/>  
+ <Logger name="com.pafpsdnc.opendata" level="trace"/>  
  </Loggers>
 </Configuration>
 ```
@@ -188,7 +188,7 @@ Nous utilisons Log4j2 pour créer et formater les logs dans la console ainsi que
 
 - Exemple de log :
 ```bash
-26/05/2021 14:05:20,905 TRACE (c.p.r.c.RecipeController:39) - Show : Recipe{id=5, portions=50, description='Lots de 50 taboulet au poulet', name='Taboulet au poulet'}
+26/05/2021 14:05:20,905 TRACE (c.p.r.c.OpenDataController:39) - Show : OpenData{id=5, uniqId=50, name='Évènement', value='Festival de la charcuterie'}
 ```
 
 ## Tests Unitaires
@@ -232,7 +232,7 @@ Pour vérifier la qualité du code, nous analysons celui-ci avec SonarQube qui e
 
 * Afin de configurer la connexion de notre projet à SonarQube,la localisation des informations fournis par les tests unitaires et jacoco ainsi que le langage du projet, nous avons ajouté les propriétés suivantes dans le fichier `pom.xml`: 
 ```xml
-<sonar.projectKey>com.pafpsdnc:recipe</sonar.projectKey>  
+<sonar.projectKey>com.pafpsdnc:opendata</sonar.projectKey>  
 <sonar.host.url>https://sonarqube.nonstopintegration.ml</sonar.host.url>  
 <sonar.login>4f2a23bcf93a430dbf93c3f50d9af08f266fdade</sonar.login>  
 <sonar.junit.reportPaths>target/surefire-reports/</sonar.junit.reportPaths>  
@@ -355,9 +355,9 @@ pipeline {
 
 Afin de documenter la partie backend de notre application de façon automatique nous avons installé Swagger. Swagger peut être installé avec beaucoup de technologies dont Spring boot et permet d'analyser et de documenter automatiquement une API. Afin de visualiser cette documentation, on peut récupérer celle-ci au format :
 
-* JSON sur la route : https://api-recipe.nonstopintegration.ml/api-docs
-* YAML sur la route : https://api-recipe.nonstopintegration.ml/api-docs.yaml
-* HTML sur la route : https://api-recipe.nonstopintegration.ml/swagger-ui.html
+* JSON sur la route : https://api-opendata.nonstopintegration.ml/api-docs
+* YAML sur la route : https://api-opendata.nonstopintegration.ml/api-docs.yaml
+* HTML sur la route : https://api-opendata.nonstopintegration.ml/swagger-ui.html
 
 ### Exemple du format HTML
 

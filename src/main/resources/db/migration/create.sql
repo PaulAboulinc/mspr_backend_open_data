@@ -1,1 +1,1 @@
-create table recipe (id bigint not null auto_increment)
+create table open_data (id bigint not null auto_increment)

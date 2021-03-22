@@ -121,7 +121,7 @@ volumes:
 >
 > * Pour le service `backend`
 >   * Indique que `dbmysql` est pré-requis pour le construction du service `app`
->   * Construire un conteneur appelé `recipe_back_msp` à partir du **Dockerfile** présent à la racine du projet
+>   * Construire un conteneur appelé `opendata_back_mspr` à partir du **Dockerfile** présent à la racine du projet
 >   * Lier au conteneur `dbmysql`
 >   * Utiliser la racine du répertoire local comme **volumes** et le lier au source du container
 >   * Renseigner les variables d'environnements dont l'application à besoin

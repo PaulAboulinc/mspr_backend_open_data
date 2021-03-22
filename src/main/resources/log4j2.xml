@@ -28,6 +28,6 @@
             <AppenderRef ref="RollingFile" />
         </Root>
 
-        <Logger name="com.pafpsdnc.recipe" level="trace"/>
+        <Logger name="com.pafpsdnc.opendata" level="trace"/>
     </Loggers>
 </Configuration>

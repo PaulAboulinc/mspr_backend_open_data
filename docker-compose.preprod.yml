@@ -22,8 +22,8 @@ services:
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - VIRTUAL_PORT=8080
-      - VIRTUAL_HOST=api-recipe.preprod.nonstopintegration.ml
-      - LETSENCRYPT_HOST=api-recipe.preprod.nonstopintegration.ml
+      - VIRTUAL_HOST=api-opendata.preprod.nonstopintegration.ml
+      - LETSENCRYPT_HOST=api-opendata.preprod.nonstopintegration.ml
       - LETSENCRYPT_EMAIL=nonstopintegration@gmail.com
 
   dbmysql_preprod:

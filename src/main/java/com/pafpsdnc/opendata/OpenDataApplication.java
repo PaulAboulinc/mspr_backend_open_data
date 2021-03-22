@@ -1,4 +1,4 @@
-package com.pafpsdnc.recipe;
+package com.pafpsdnc.opendata;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
@@ -7,10 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class RecipeApplication {
+public class OpenDataApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(RecipeApplication.class, args);
+        SpringApplication.run(OpenDataApplication.class, args);
     }
 
     @Bean
