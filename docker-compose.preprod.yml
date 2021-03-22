@@ -31,8 +31,8 @@ services:
     image: mysql:5.7.32
     container_name: dbmysql_preprod
     volumes:
-      - mysql_dev:/var/lib/localsql
-      - mysql_data_dev:/var/lib/localsql/data
+      - mysql_preprod:/var/lib/localsql
+      - mysql_data_preprod:/var/lib/localsql/data
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: database

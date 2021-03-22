@@ -1,1 +1,0 @@
-create table open_data (id bigint not null auto_increment)

@@ -32,8 +32,8 @@ services:
     image: mysql:5.7.32
     container_name: dbmysql_prod
     volumes:
-      - mysql_dev:/var/lib/localsql
-      - mysql_data_dev:/var/lib/localsql/data
+      - mysql_prod:/var/lib/localsql
+      - mysql_data_prod:/var/lib/localsql/data
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: database
