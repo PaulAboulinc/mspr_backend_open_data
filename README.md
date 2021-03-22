@@ -67,53 +67,53 @@ services:
     network_mode: bridge  
     container_name: backend_dev  
     depends_on:  
-      - dbpostgres_dev  
+      - dbmysql_dev  
     links:  
-      - dbpostgres_dev  
+      - dbmysql_dev  
     volumes:  
       -  ./:/home/app/  
     environment:  
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres_dev:5432/database  
+      - SPRING_DATASOURCE_URL=jdbc:mysql://dbmysql_dev:3306/database  
       - SPRING_DATASOURCE_USERNAME=username  
       - SPRING_DATASOURCE_PASSWORD=password  
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update  
     ports:  
       - 7001:8080  
   
-  dbpostgres_dev:  
-    image: postgres:13.1-alpine  
+  dbmysql_dev:  
+    image: mysql:5.7.32  
     network_mode: bridge  
-    container_name: dbpostgres_dev  
+    container_name: dbmysql_dev  
     volumes:  
-      - postgres_dev:/var/lib/postgresql  
-      - postgres_data_dev:/var/lib/postgresql/data  
+      - mysql_dev:/var/lib/mysql  
+      - mysql_data_dev:/var/lib/mysql/data  
     environment:  
-      POSTGRES_DB: database  
-      POSTGRES_USER: username  
-      POSTGRES_PASSWORD: password  
+      MYSQL_DB: database  
+      MYSQL_USER: username  
+      MYSQL_PASSWORD: password  
   
 volumes:  
-  postgres_data_dev:  
-  postgres_dev:
+  mysql_data_dev:  
+  mysql_dev:
 ```
 
 > Ce fichier **docker-compose** permet de :
 >
 > * Pour le service `backend_dev`
->    * Indique que `dbpostgres_dev` est pré-requis pour le construction du service `backend_dev`
+>    * Indique que `dbmysql_dev` est pré-requis pour le construction du service `backend_dev`
 >    * Construire un conteneur appelé `backend_dev` à partir du **Dockerfile** présent à la racine du projet
->    * Lier au conteneur `dbpostgres_dev`
+>    * Lier au conteneur `dbmysql_dev`
 >    * Utiliser la racine du répertoire local comme **volumes** et le lier au source du container
 >    * Renseigner les variables d'environnements dont l'application à besoin
 >    * Rediriger le port **8080** du container vers le **7001** de la machine parent
->  * Pour le service `dbpostgres_dev`
->     * Construire le container `dbpostgres_dev` à partir de l'image `postgres:13.1-alpine`
+>  * Pour le service `dbmysql_dev`
+>     * Construire le container `dbmysql_dev` à partir de l'image `mysql:5.7.32`
 >     * Renseigner les variables d'environnements nécessaires à la base de donnée
->     * Lier le dossier `/var/lib/postgresql` au volume `postgres_dev`
->     * Lier le dossier `/var/lib/postgresql/data` au volume `postgres_data_dev`
+>     * Lier le dossier `/var/lib/mysql` au volume `mysql_dev`
+>     * Lier le dossier `/var/lib/mysql/data` au volume `mysql_data_dev`
 >  * Pour la partie `volumes`
->     * Création du volume `postgres_dev`
->     * Création du volume `postgres_data_dev`
+>     * Création du volume `mysql_dev`
+>     * Création du volume `mysql_data_dev`
 
 * Pour construire le container et le déployer en local
 

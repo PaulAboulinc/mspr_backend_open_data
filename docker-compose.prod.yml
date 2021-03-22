@@ -9,16 +9,16 @@ services:
     image: backend_prod
     container_name: backend_prod
     depends_on:
-      - dbpostgres_prod
+      - dbmysql_prod
     links:
-      - dbpostgres_prod
+      - dbmysql_prod
     volumes:
       -  ./:/home/app/
     expose:
       - 80
     restart: always
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres_prod:5432/database
+      - SPRING_DATASOURCE_URL=jdbc:mysql://dbmysql_prod:3306/database
       - SPRING_DATASOURCE_USERNAME=username
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -27,20 +27,22 @@ services:
       - LETSENCRYPT_HOST=api-recipe.nonstopintegration.ml
       - LETSENCRYPT_EMAIL=nonstopintegration@gmail.com
 
-  dbpostgres_prod:
-    image: postgres:13.1-alpine
-    container_name: dbpostgres_prod
+  dbmysql_prod:
+    user: "1000:50"
+    image: mysql:5.7.32
+    container_name: dbmysql_prod
     volumes:
-      - postgres_prod:/var/lib/postgresql
-      - postgres_data_prod:/var/lib/postgresql/data
+      - mysql_dev:/var/lib/localsql
+      - mysql_data_dev:/var/lib/localsql/data
     environment:
-      POSTGRES_DB: database
-      POSTGRES_USER: username
-      POSTGRES_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: database
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
 
 volumes:
-  postgres_data_prod:
-  postgres_prod:
+  mysql_data_prod:
+  mysql_prod:
 
 networks:
   default:

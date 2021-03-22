@@ -9,31 +9,33 @@ services:
     network_mode: bridge
     container_name: backend_dev
     depends_on:
-      - dbpostgres_dev
+      - dbmysql_dev
     links:
-      - dbpostgres_dev
+      - dbmysql_dev
     volumes:
       -  ./:/home/app/
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres_dev:5432/database
+      - SPRING_DATASOURCE_URL=jdbc:mysql://dbmysql_dev:3306/database
       - SPRING_DATASOURCE_USERNAME=username
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     ports:
       - 7001:8080
 
-  dbpostgres_dev:
-    image: postgres:13.1-alpine
+  dbmysql_dev:
+    user: "1000:50"
+    image: mysql:5.7.32
     network_mode: bridge
-    container_name: dbpostgres_dev
+    container_name: dbmysql_dev
     volumes:
-      - postgres_dev:/var/lib/postgresql
-      - postgres_data_dev:/var/lib/postgresql/data
+      - mysql_dev:/var/lib/localsql
+      - mysql_data_dev:/var/lib/localsql/data
     environment:
-      POSTGRES_DB: database
-      POSTGRES_USER: username
-      POSTGRES_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: database
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
 
 volumes:
-  postgres_data_dev:
-  postgres_dev:
+  mysql_data_dev:
+  mysql_dev:

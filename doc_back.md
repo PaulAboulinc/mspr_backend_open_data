@@ -86,55 +86,55 @@ services:
     build: .
     container_name: api_backend
     depends_on:
-      - dbpostgres
+      - dbmysql
     links:
-      - dbpostgres
+      - dbmysql
     volumes:
       -  ./:/home/app/
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbpostgres:5432/cooking
+      - SPRING_DATASOURCE_URL=jdbc:mysql://dbmysql:3306/cooking
       - SPRING_DATASOURCE_USERNAME=cooking
       - SPRING_DATASOURCE_PASSWORD=cooking
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     ports:
       - 7001:8080
 
-  dbpostgres:
-    image: postgres:13.1-alpine
-    container_name: dbpostgres
+  dbmysql:
+    image: mysql:5.7.32
+    container_name: dbmysql
     volumes:
-      - postgres:/var/lib/postgresql
-      - postgres_data:/var/lib/postgresql/data
+      - mysql:/var/lib/mysql
+      - mysql_data:/var/lib/mysql/data
     environment:
-      POSTGRES_DB: cooking
-      POSTGRES_USER: cooking
-      POSTGRES_PASSWORD: cooking
+      MYSQL_DB: cooking
+      MYSQL_USER: cooking
+      MYSQL_PASSWORD: cooking
     ports:
-      - 5432:5432
+      - 3306:3306
 
 volumes:
-  postgres_data:
-  postgres:
+  mysql_data:
+  mysql:
 ```
 
 > Ce fichier **docker-compose** permet de :
 >
 > * Pour le service `backend`
->   * Indique que `dbpostgres` est pré-requis pour le construction du service `app`
+>   * Indique que `dbmysql` est pré-requis pour le construction du service `app`
 >   * Construire un conteneur appelé `recipe_back_msp` à partir du **Dockerfile** présent à la racine du projet
->   * Lier au conteneur `dbpostgres`
+>   * Lier au conteneur `dbmysql`
 >   * Utiliser la racine du répertoire local comme **volumes** et le lier au source du container
 >   * Renseigner les variables d'environnements dont l'application à besoin
 >   * Rediriger le port **8080** du container vers le **7001** de la machine parent
 >  * Pour le service `db`
->    * Construire le container `dbpostgres` à partir de l'image `postgres:13.1-alpine`
+>    * Construire le container `dbmysql` à partir de l'image `mysql:5.7.32`
 >    * Renseigner les variables d'environnements nécessaires à la base de donnée
->    * Lier le dossier `/var/lib/postgresql` au volume `postgres`
->    * Lier le dossier `/var/lib/postgresql/data` au volume `postgres_data`
->    * Rediriger le port **5432** du container vers le **5432** du serveur
+>    * Lier le dossier `/var/lib/mysql` au volume `mysql`
+>    * Lier le dossier `/var/lib/mysql/data` au volume `mysql_data`
+>    * Rediriger le port **3306** du container vers le **3306** du serveur
 >  * Pour la partie `volumes`
->    * Création du volume `postgres`
->    * Création du volume `postgres_data`
+>    * Création du volume `mysql`
+>    * Création du volume `mysql_data`
 
 * Pour construire le container et le déployer en local
 
