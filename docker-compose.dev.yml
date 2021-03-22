@@ -1,13 +1,13 @@
 version: '3'
 
 services:
-  backend_dev:
+  backend_opendata_dev:
     build:
       context: .
       args:
         - ENV=dev
     network_mode: bridge
-    container_name: backend_dev
+    container_name: backend_opendata_dev
     depends_on:
       - dbmysql_dev
     links:

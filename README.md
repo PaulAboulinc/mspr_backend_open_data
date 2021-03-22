@@ -59,13 +59,13 @@ ENTRYPOINT ["java","-jar","/usr/local/lib/demo.jar"]
 version: '3'  
   
 services:  
-  backend_dev:  
+  backend_opendata_dev:  
     build:  
       context: .  
       args:  
         - ENV=dev  
     network_mode: bridge  
-    container_name: backend_dev  
+    container_name: backend_opendata_dev  
     depends_on:  
       - dbmysql_dev  
     links:  
@@ -99,9 +99,9 @@ volumes:
 
 > Ce fichier **docker-compose** permet de :
 >
-> * Pour le service `backend_dev`
->    * Indique que `dbmysql_dev` est pré-requis pour le construction du service `backend_dev`
->    * Construire un conteneur appelé `backend_dev` à partir du **Dockerfile** présent à la racine du projet
+> * Pour le service `backend_opendata_dev`
+>    * Indique que `dbmysql_dev` est pré-requis pour le construction du service `backend_opendata_dev`
+>    * Construire un conteneur appelé `backend_opendata_dev` à partir du **Dockerfile** présent à la racine du projet
 >    * Lier au conteneur `dbmysql_dev`
 >    * Utiliser la racine du répertoire local comme **volumes** et le lier au source du container
 >    * Renseigner les variables d'environnements dont l'application à besoin
@@ -217,12 +217,12 @@ Afin de réaliser les tests unitaires sur le projet, nous avons utilisé Junit 4
 
 * Les tests doivent être lancée depuis le container docker, voici la commande à jouer : 
 ```shell
-docker exec backend_dev mvn -B -f /home/app/pom.xml test
+docker exec backend_opendata_dev mvn -B -f /home/app/pom.xml test
 ```
 
 * Afin d'obtenir un rapport du coverage à l'aide de JaCoCo, exécuter la commande suivante :
 ```shell
-docker exec backend_dev mvn -B -f /home/app/pom.xml jacoco:report
+docker exec backend_opendata_dev mvn -B -f /home/app/pom.xml jacoco:report
 ```
 On peut ensuite accéder au résultat des tests au format HTML sur : http://localhost:7001/
 
@@ -308,7 +308,7 @@ pipeline {
                 expression { ENV_NAME == 'preprod' || ENV_NAME == 'prod' }  
             }  
             steps {  
-                sh 'docker-compose -p backend_${ENV_NAME} -f \
+                sh 'docker-compose -p backend_opendata_${ENV_NAME} -f \
                  docker-compose.${ENV_NAME}.yml up --build -d'  
             }  
         }  

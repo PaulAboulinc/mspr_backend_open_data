@@ -6,7 +6,7 @@ services:
       context: .
       args:
         - ENV=preprod
-    container_name: backend_preprod
+    container_name: backend_opendata_preprod
     depends_on:
       - dbmysql_preprod
     links:

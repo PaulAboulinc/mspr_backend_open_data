@@ -57,7 +57,7 @@ pipeline {
                 expression { ENV_NAME == 'preprod' || ENV_NAME == 'prod' }
             }
             steps {
-                sh 'docker-compose -p backend_${ENV_NAME} -f docker-compose.${ENV_NAME}.yml up --build -d'
+                sh 'docker-compose -p backend_opendata_${ENV_NAME} -f docker-compose.${ENV_NAME}.yml up --build -d'
             }
         }
     }

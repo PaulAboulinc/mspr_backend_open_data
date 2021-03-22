@@ -6,8 +6,8 @@ services:
       context: .
       args:
         - ENV=prod
-    image: backend_prod
-    container_name: backend_prod
+    image: backend_opendata_prod
+    container_name: backend_opendata_prod
     depends_on:
       - dbmysql_prod
     links:
