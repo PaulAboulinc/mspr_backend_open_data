@@ -44,7 +44,7 @@ class OpenDataApplicationTests {
 		openData = controller.updateOpenData(openData.getId(), requestBody);
 		assertThat(openData.getName()).isEqualTo("name updated");
 
-		String message = "Les données " + openData.getId() + " ont bien été supprimées";
+		String message = "Les données avec l'id " + openData.getUniqId() + " ont bien été supprimées";
 		assertThat(controller.deleteOpenData(openData.getId())).isEqualTo(message);
 	}
 

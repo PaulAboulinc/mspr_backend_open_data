@@ -129,17 +129,17 @@ http://localhost:7001/api/
 
 
 ## Dépendances
-| Dépendance         | Version | Commentaire                                                     |
-|--------------------|---------|-----------------------------------------------------------------|
-| Spring Web         | 2.4.1   | Permet de build (utilise apache tomcat)                         |
-| Spring Data JPA    | 2.4.1   | Utilise Hibernate pour gérer la persistance                     |
-| PostgresSQL driver | 42.2.18 | Driver pour se connecter à la base de données PostgesSQL        |
-| Springdoc openapi  | 1.5.1   | Permet de générer la documentation                              |
-| Junit              | 4.13.1  | Permet de réaliser les tests unitaires                          |
-| H2database         | 1.4.200 | Base de données SQL pour JAVA, celle-ci est utilisée pour les tests unitaires |
-| Jasper Reports     | 6.1.0   | Permet de générer des pdf                                       |
-| Log4j2             | 2.4.2   | Permet de générer et formater les logs                         |
-| Plugin JaCoCo      | 0.8.5   | Permet de calculer le code coverage (fonctionne avec sonarqube) |
+| Dépendance           | Version | Commentaire                                                     |
+|----------------------|---------|-----------------------------------------------------------------|
+| Spring Web           | 2.4.1   | Permet de build (utilise apache tomcat)                         |
+| Spring Data JPA      | 2.4.1   | Utilise Hibernate pour gérer la persistance                     |
+| Mysql connector java | 8.0.22  | Driver pour se connecter à la base de données Mysql             |
+| Springdoc openapi    | 1.5.1   | Permet de générer la documentation                              |
+| Junit                | 4.13.1  | Permet de réaliser les tests unitaires                          |
+| H2database           | 1.4.200 | Base de données SQL pour JAVA, celle-ci est utilisée pour les tests unitaires |
+| Jasper Reports       | 6.1.0   | Permet de générer des pdf                                       |
+| Log4j2               | 2.4.2   | Permet de générer et formater les logs                          |
+| Plugin JaCoCo        | 0.8.5   | Permet de calculer le code coverage (fonctionne avec sonarqube) |
 
 ## Logger
 
