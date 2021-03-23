@@ -85,8 +85,8 @@ services:
     network_mode: bridge  
     container_name: dbmysql_dev  
     volumes:  
-      - mysql_dev:/var/lib/mysql  
-      - mysql_data_dev:/var/lib/mysql/data  
+      - mysql_dev:/var/lib/localsql  
+      - mysql_data_dev:/var/lib/localsql/data  
     environment:  
       MYSQL_DB: database  
       MYSQL_USER: username  
@@ -109,8 +109,8 @@ volumes:
 >  * Pour le service `dbmysql_dev`
 >     * Construire le container `dbmysql_dev` à partir de l'image `mysql:5.7.32`
 >     * Renseigner les variables d'environnements nécessaires à la base de donnée
->     * Lier le dossier `/var/lib/mysql` au volume `mysql_dev`
->     * Lier le dossier `/var/lib/mysql/data` au volume `mysql_data_dev`
+>     * Lier le dossier `/var/lib/localsql` au volume `mysql_dev`
+>     * Lier le dossier `/var/lib/localsql/data` au volume `mysql_data_dev`
 >  * Pour la partie `volumes`
 >     * Création du volume `mysql_dev`
 >     * Création du volume `mysql_data_dev`
