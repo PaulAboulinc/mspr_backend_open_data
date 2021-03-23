@@ -112,7 +112,7 @@ public class OpenDataController {
 
     @PostMapping("/import")
     @ResponseStatus(HttpStatus.OK)
-    public String importOpenData(@RequestParam("file") MultipartFile file) throws IOException, CsvException {
+    public String importOpenData(@RequestParam("file0") MultipartFile file) throws IOException, CsvException {
         if (file.isEmpty()) {
             logger.trace("Import CSV : file not found");
             return "Import CSV has ended with errors";
